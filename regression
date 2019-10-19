@@ -181,15 +181,7 @@ The goal of the model is to establish the relationship between "mpg" as a respon
  Live Demo
 input <- mtcars[,c("mpg","disp","hp","wt")]
 print(head(input))
-When we execute the above code, it produces the following result −
 
-                   mpg   disp   hp    wt
-Mazda RX4          21.0  160    110   2.620
-Mazda RX4 Wag      21.0  160    110   2.875
-Datsun 710         22.8  108     93   2.320
-Hornet 4 Drive     21.4  258    110   3.215
-Hornet Sportabout  18.7  360    175   3.440
-Valiant            18.1  225    105   3.460
 Create Relationship Model & get the Coefficients
  Live Demo
 input <- mtcars[,c("mpg","disp","hp","wt")]
@@ -243,3 +235,32 @@ We can use the regression equation created above to predict the mileage when a n
 For a car with disp = 221, hp = 102 and wt = 2.91 the predicted mileage is −
 
 Y = 37.15+(-0.000937)*221+(-0.0311)*102+(-3.8008)*2.91 = 22.7104
+
+=====================================================
+
+Correlation Coefficient
+The correlation coefficient of two variables in a data set equals to their covariance divided by the product of their individual standard deviations. It is a normalized measurement of how the two are linearly related.
+
+Formally, the sample correlation coefficient is defined by the following formula, where sx and sy are the sample standard deviations, and sxy is the sample covariance.
+
+      s
+rxy =--xy
+     sxsy
+Similarly, the population correlation coefficient is defined as follows, where σx and σy are the population standard deviations, and σxy is the population covariance.
+
+ρ  = -σxy-
+ xy  σxσy
+If the correlation coefficient is close to 1, it would indicate that the variables are positively linearly related and the scatter plot falls almost along a straight line with positive slope. For -1, it indicates that the variables are negatively linearly related and the scatter plot almost falls along a straight line with negative slope. And for zero, it would indicate a weak linear relationship between the variables.
+
+Problem
+Find the correlation coefficient of eruption duration and waiting time in the data set faithful. Observe if there is any linear relationship between the variables.
+
+Solution
+We apply the cor function to compute the correlation coefficient of eruptions and waiting.
+
+> duration = faithful$eruptions   # eruption durations 
+> waiting = faithful$waiting      # the waiting period 
+> cor(duration, waiting)          # apply the cor function 
+[1] 0.90081
+Answer
+The correlation coefficient of eruption duration and waiting time is 0.90081. Since it is rather close to 1, we can conclude that the variables are positively linearly related.
