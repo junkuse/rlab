@@ -1,0 +1,76 @@
+Kurtosis
+The excess kurtosis of a univariate population is defined by the following formula, where μ2 and μ4 are respectively the second and fourth central moments.
+
+γ2 = μ4∕μ22 - 3
+Intuitively, the excess kurtosis describes the tail shape of the data distribution. The normal distribution has zero excess kurtosis and thus the standard tail shape. It is said to be mesokurtic. Negative excess kurtosis would indicate a thin-tailed data distribution, and is said to be platykurtic. Positive excess kurtosis would indicate a fat-tailed distribution, and is said to be leptokurtic.
+
+Problem
+Find the excess kurtosis of eruption duration in the data set faithful.
+
+Solution
+We apply the function kurtosis from the e1071 package to compute the excess kurtosis of eruptions. As the package is not in the core R library, it has to be installed and loaded into the R workspace.
+
+> library(e1071)                    # load e1071 
+> duration = faithful$eruptions     # eruption durations 
+> kurtosis(duration)                # apply the kurtosis function 
+[1] -1.5116
+Answer
+The excess kurtosis of eruption duration is -1.5116, which indicates that eruption duration distribution is platykurtic. This is consistent with the fact that its histogram is not bell-shaped.
+
+Exercise
+Find the excess kurtosis of eruption waiting period in faithful.
+
+Note
+The default algorithm of the function kurtosis in e1071 is based on the formula g2 = m4∕s4 - 3, where m4 and s are the fourth central moment and sample standard deviation respectively. See the R documentation for selecting other types of kurtosis algorithm.
+
+> library(e1071)                    # load e1071 
+> help(kurtosis)
+
+====================================
+
+Skewness
+The skewness of a data population is defined by the following formula, where μ2 and μ3 are the second and third central moments.
+
+γ1 = μ3∕μ3∕22
+Intuitively, the skewness is a measure of symmetry. As a rule, negative skewness indicates that the mean of the data values is less than the median, and the data distribution is left-skewed. Positive skewness would indicate that the mean of the data values is larger than the median, and the data distribution is right-skewed.
+
+Problem
+Find the skewness of eruption duration in the data set faithful.
+
+Solution
+We apply the function skewness from the e1071 package to compute the skewness coefficient of eruptions. As the package is not in the core R library, it has to be installed and loaded into the R workspace.
+
+> library(e1071)                    # load e1071 
+> duration = faithful$eruptions     # eruption durations 
+> skewness(duration)                # apply the skewness function 
+[1] -0.41355
+Answer
+The skewness of eruption duration is -0.41355. It indicates that the eruption duration distribution is skewed towards the left.
+
+=========================================
+
+Central Moment
+The kth central moment (or moment about the mean) of a data population is:
+
+     1-∑N       k
+μk = N    (xi - μ)
+       i=1
+Similarly, the kth central moment of a data sample is:
+
+     1-∑n       k
+mk = n    (xi - ¯x)
+       i=1
+In particular, the second central moment of a population is its variance.
+
+Problem
+Find the third central moment of eruption duration in the data set faithful.
+
+Solution
+We apply the function moment from the e1071 package. As it is not in the core R library, the package has to be installed and loaded into the R workspace.
+
+> library(e1071)                    # load e1071 
+> duration = faithful$eruptions     # eruption durations 
+> moment(duration, order=3, center=TRUE) 
+[1] -0.6149
+Answer
+The third central moment of eruption duration is -0.6149.
