@@ -1,0 +1,2693 @@
+Hypothesis Test
+6.1 Confidence Intervals for a Mean
+6.1.1 Objective
+The aim of this worked example is to construct a confidence interval for the
+mean of a quantitative variable from a sample. The method presented here
+can be extended to construct a confidence interval of a proportion (see Section 6.1.6, "Taking Things Further").
+The confidence interval for the population mean µ for a variable X is
+expressed as:
+  
+x¯ ???
+??^
+???
+n
+× t1?????/2(n ??? 1) , x¯ +
+  ??^
+???
+n
+× t1?????/2(n ??? 1)
+where ¯x is the empirical mean of the sample, ^?? the estimated standard deviation, n the sample size, and t1?????/2(n???1) the quantile 1?????/2 of the Student's
+t-distribution with (n ??? 1) degrees of freedom. It is important to remember
+that the procedure assumes that the estimator of the mean X¯ follows a normal
+distribution. This is true if X follows a normal distribution or if the sample
+size is large enough (in practice, n > 30, thanks to the central limit theorem).
+6.1.2 Example
+We examine the weight of adult female octopuses. We have access to a sample
+from 240 female octopuses fished off the coast of Mauritania. For the overall
+population, we would like to obtain an estimation of the mean of the weight
+and a confidence interval for this mean with a threshold of 95%.
+6.1.3 Steps
+1. Read the data.
+2. Calculate the descriptive statistics (mean, standard deviation).
+3. Construct a histogram.
+4. (Optional) Test the normality of the data.
+110 R for Statistics
+5. Construct the confidence interval.
+6.1.4 Processing the Example
+1. Reading the data:
+  Import the data by using the read.table function. Then check that the data
+has been correctly imported:
+  > octopus <- read.table("OctopusF.txt",header=T)
+> dim(octopus)
+[1] 240 1
+> summary(octopus)
+Weight
+Min. : 40.0
+1st Qu.: 300.0
+Median : 545.0
+Mean : 639.6
+3rd Qu.: 800.0
+Max. :2400.0
+Check that the sample size is equal to n = 240. Then check that the variable Weight is indeed quantitative and obtain the minimum, the mean, the
+quartiles and the maximum for this variable.
+2. Calculating the descriptive statistics:
+  Next, estimate the mean (¯x) and the standard deviation (^??) within the sample:
+  > mean(octopus)
+Weight
+639.625
+> sd(octopus)
+Weight
+445.8965
+3. Constructing a histogram:
+  Prior to any statistical analysis, it can be useful to represent the data graphically. As the data is quantitative, a histogram is used:
+  > hist(octopus[,"Weight"],main="",nclass=15,freq=FALSE,
+         ylab="Density",xlab="Weight")
+We use the argument freq=FALSE, which is equivalent to prob=TRUE, to obtain
+a representation of the density, rather than frequency. The argument nclass
+Confidence Intervals for a Mean 111
+is not compulsory but can be used to choose the number of intervals. The
+histogram (Figure 6.1) gives an idea of the weight distribution.
+Weight
+Density
+0 500 1000 1500 2000
+0.0000 0.0004 0.0008 0.0012
+Figure 6.1
+Histogram of octopus weight.
+This distribution is asymmetric and is far from a normal distribution.
+4. (Optional) Testing the normality of the data:
+  In order to construct a mean confidence interval, it is assumed that its estimator follows a normal distribution. For any large sample (over thirty individuals), this is a reasonable hypothesis. For small samples, the normality of
+the sample should be tested, rather than that of the mean. In order to do so,
+it is possible to have an account of probability plotting for informal assessment of normality (using the qqnorm function) or to use the Shapiro-Wilk test
+(shapiro.test). If normality is refused, we can construct a confidence interval
+using, for example, a bootstrap procedure (use the function boot.ci from the
+                                           package boot). In this example, the sample size is 240 and these tests are
+therefore unnecessary.
+5. Constructing the confidence interval:
+  The confidence interval is calculated using the function t.test:
+  > t.test(octopus$Weight,conf.level=0.95)$conf.int
+[1] 582.9252 696.3248
+attr(,"conf.level")
+[1] 0.95
+Strictly speaking, the unknown mean µ of X, estimated to be 639.625 g, either
+does or does not belong to the interval [583, 696]. It is therefore within the
+interval with a probability of 0 or 1. However, the procedure as a whole
+112 R for Statistics
+guarantees that, if it is repeated infinitely with new samples of the same size
+n = 240, then 95% of the confidence intervals will contain the true unknown
+value of µ. In practice, it is faster to say that the true mean µ is between
+583 g and 696 g at a confidence level of 95%.
+It is also possible to calculate the confidence interval "by hand" by calculating
+x¯±t239(0.975)×??/^
+???
+n, where t239(0.975) is the quantile 97.5% of the Student's
+t-distribution with 239 degrees of freedom:
+  > mean(octopus$Weight)-qt(0.975, df=239)*
+  sd(octopus$Weight)/sqrt(240)
+[1] 582.9252
+> mean(octopus$Weight)+qt(0.975, df=239)*
+  sd(octopus$Weight)/sqrt(240)
+[1] 696.3248
+6.1.5 Rcmdr Corner
+1. Reading the data from a file:
+  Data ??? Import data ??? from text file, clipboard, or URL ...
+then select the file.
+To check that the dataset has been imported successfully:
+  Statistics ??? Summaries ??? Active data set
+2. Calculating the descriptive statistics:
+  Statistics ??? Summaries ??? Numerical summaries...
+3. Constructing a histogram:
+  Graphs ??? Histogram... Then choose the number of classes and the scale
+of the Densities axes.
+4. (Optional) Testing the normality of the data: Statistics ??? Summaries
+??? Shapiro-Wilk test of normality...
+5. Constructing the confidence interval:
+  We use a function which tests the equality of the mean with a predefined value
+(which is 0 by default) and as output this function provides the confidence
+interval: Statistics ??? Means ??? Single-sample t-test...
+6.1.6 Taking Things Further
+To construct a confidence interval for a proportion, we use the function prop.test
+(see also the worked example on test for equality of two proportions in Section 6.4, p. 125).
+These classical methods are explained in detail in many books such as
+Clarke and Cooke (2004).
+Chi-Square Test of Independence 113
+6.2 Chi-Square Test of Independence
+6.2.1 Objective
+The objective of this worked example is to test the independence between
+two qualitative variables. First, we consider that the data is in a contingency
+table (two-way table). In Section 6.2.6, "Taking Things Further", we examine
+a case in which the data is in a table of individuals × variables.
+To test the independence of two qualitative variables, we test the null
+hypothesis H0: "the two variables are independent" against the alternative
+hypothesis H1: "the two variables are not independent". In order to do so,
+we calculate the following test statistic:
+  ??
+2 =
+  X
+I
+i=1
+X
+J
+j=1
+(nij ??? Tij )
+2
+Tij
+,
+where nij is the number of individuals (observed frequency) who take the
+category i of the first variable and the category j of the second, and Tij
+corresponds to the expected frequency under the null hypothesis, and I and
+J are the number of categories for each of the variables. Thus, Tij = np^i.p^.j
+with n the total sample size, ^pi. =
+  P
+j nij
+n
+and ^p.j =
+  P
+i nij
+n
+. Under H0, ??
+2
+follows a chi-square distribution with (I ??? 1) × (J ??? 1) degrees of freedom.
+If there is no independence, it is interesting to calculate the contribution of
+pairs of categories to the chi-square statistic in order to observe associations
+between categories.
+6.2.2 Example
+This is a historic example by Fisher. He studied the hair colour of boys and
+girls in a Scottish county:
+  Fair Red Medium Dark Jet Black
+Boys 592 119 849 504 36
+Girls 544 97 677 451 14
+We would like to know if hair colour is independent of sex with a type-one
+error rate of 5%. If hair colour does depend on sex, we would like to study the
+association between categories, for example to know which colours are more
+common in girls than in boys.
+6.2.3 Steps
+1. Input the data.
+114 R for Statistics
+2. Visualise the data.
+3. (Optional) Calculate row and column profiles.
+4. Construct the chi-square test.
+5. Calculate the contributions to the chi-square statistic.
+6.2.4 Processing the Example
+1. Inputting the data:
+  Input the data manually into a matrix. Assign row names (rownames) and
+column names (colnames):
+  > colour<-matrix(c(592,544,119,97,849,677,504,451,36,14),ncol=5)
+> rownames(colour)<-c("Boys","Girls")
+> colnames(colour)<-c("Fair","Red","Medium","Dark","Jet Black")
+2. Visualising the data:
+  The data can be represented as more common in girls than in boys according
+to sex in one graph window (Figure 6.2). In order to do so, we use the par
+function, (see Section 3.1.6, p. 67) and the attribute which defines the number
+of graphs by row and column (mfrow=c(2,1)):
+  > par(mfrow=c(2,1))
+> barplot(colour[1,],main="Boys")
+> barplot(colour[2,],main="Girls")
+Fair Red Medium Dark Jet Black
+Boys
+Hair colour
+Observed frequency
+0 200 400 600 800
+Fair Red Medium Dark Jet Black
+Girls
+Hair colour
+Observed frequency
+0 200 400 600
+Figure 6.2
+Distributions of hair colour by sex.
+Chi-Square Test of Independence 115
+3. (Optional) Calculating row and column profiles:
+  To explore the data, it can be interesting to calculate the row and column
+profiles. First calculate the joint frequencies, that is to say, the percentages
+nij/n. The results can be presented by multiplying by 100 and then rounding
+to the first decimal place using the round function:
+  > round(100 * colour / sum(colour), 1)
+Fair Red Medium Dark Jet Black
+Boys 15.2 3.1 21.9 13.0 0.9
+Girls 14.0 2.5 17.4 11.6 0.4
+The row profiles (nij/
+                    P
+                  j
+                  nij ) are calculated using the prop.table function
+and the argument margin = 1. Note that, to use this function, the dataset
+must be a matrix. If this is not the case, it must be converted to a matrix
+using the function as.matrix.
+> round(100 * prop.table (colour, margin = 1), 1)
+Fair Red Medium Dark Jet Black
+Boys 28.2 5.7 40.4 24.0 1.7
+Girls 30.5 5.4 38.0 25.3 0.8
+This yields the distributions of hair colour according to sex which are represented in Figure 6.2. There is very little difference between these row profiles.
+The link between the two variables is not immediately obvious; it can therefore be useful to conduct a test.
+The column profiles are calculated in the same way (nij/
+                                                      P
+                                                    i
+                                                    nij ) while specifying that this time we are working on columns (margin = 2):
+  > round(100 * prop.table (colour, margin = 2), 1)
+Fair Red Medium Dark Jet Black
+Boys 52.1 55.1 55.6 52.8 72
+Girls 47.9 44.9 44.4 47.2 28
+With regards to the column profiles, the greatest differences are for those with
+jet black hair: 72% of those with jet black hair are boys.
+4. Constructing the chi-square test:
+  In order to conduct the test of independence between the variables sex and
+hair colour, we calculate the ??
+2
+obs value and determine the p-value associated
+with the test:
+  > results <- chisq.test(colour)
+> results
+116 R for Statistics
+Pearson's Chi-squared test
+data: colour
+X-squared = 10.4674, df = 4, p-value = 0.03325
+The p-value indicates that such a big ??
+2
+obs value would have 3.32% probability
+of being observed in a sample of this size if hair colour were independent of
+sex. Thus, at the 5% threshold, we reject the independence hypothesis and
+conclude that, according to this dataset, hair colour depends on sex.
+5. Calculating the contributions to the ??
+2
+-statistic:
+  This relationship between the two variables can be studied in greater detail
+by calculating the contributions (nij???Tij )
+2
+Tij
+to the ??
+2
+obs statistic. The square
+roots of these contributions are in the object residuals. By dividing each
+term by the total (i.e. the ??
+                   2
+                   obs value contained in the stat object), we obtain
+the contributions expressed as percentage:
+  > round(100 * results$residuals^2 / results$stat, 1)
+Fair Red Medium Dark Jet Black
+Boys 7.8 0.4 6.5 2.9 28.4
+Girls 9.2 0.5 7.7 3.4 33.4
+The combinations which contribute the most to the non-independence of the
+two variables are those concerning Jet Black. In order to interpret the contribution, we inspect the residuals, and more precisely their positivity or negativity:
+  > round(results$residuals, 3)
+Fair Red Medium Dark Jet Black
+Boys -0.903 0.202 0.825 -0.549 1.723
+Girls 0.979 -0.219 -0.896 0.596 -1.870
+It can be said that the number of boys with jet black hair is greater than
+expected (implied: greater than if the independence hypothesis were true)
+and there are fewer girls than expected.
+6.2.5 Rcmdr Corner
+In Rcmdr, it is impossible to construct a chi-square test of independence from a
+contingency table previously input. If the data is in the form of a contingency
+table, we recommend that you conduct the test using the command window
+(see above).
+Nevertheless, it is possible:
+  . To input data directly into Rcmdr and then to analyse that data. In this
+Chi-Square Test of Independence 117
+way, we can obtain the row or column percentages, the contributions and
+the test statistic:
+  Statistics ??? Contingency tables
+??? Enter and analyze two-way table...
+. To use the existing data in the form of a table of individuals × variables (see Section 6.2.6, "Taking Things Further"). We then use the
+menu Statistics ??? Contingency tables ??? Two-way table to select
+two variables and obtain a contingency table. This procedure yields the
+result of the test and the contributions to the ??
+2
+statistic.
+6.2.6 Taking Things Further
+The data may arrive from a table of individuals × variables: with the children
+in rows (i.e. the statistical individual), and the qualitative variables in the
+columns, which here are colour and sex. The same procedure can therefore
+be carried out as before using the function xtabs (see Section 2.6, p. 46).
+Once the contingency table has been constructed, it is possible to analyse it
+as previously described:
+  > cont.tab <- xtabs(~colour+sex, data=dataset)
+> chisq.test(cont.tab)
+The contingency tables can be visualised with a correspondence analysis (CA) by using the CA function (Worked Example 10.2, p. 222) from the
+FactoMineR package.
+Theoretical explanations and examples of the chi-square test are available
+in many books, such as Clarke and Cooke (2004).
+118 R for Statistics
+6.3 Comparison of Two Means
+6.3.1 Objective
+The aim of this worked example is to test the equality of the means of two subpopulations (µ1 and µ2) for a quantitative variable X. In formal terms, we test
+the hypothesis H0 : µ1 = µ2 against the alternative hypothesis H1 : µ1 6= µ2
+(or H1 : µ1 > µ2 or H1 : µ1 < µ2).
+In order to carry out this test, we have to know if the variances of the variable X (??
+                                                                                     2
+                                                                                     1 and ??
+                                                                                     2
+                                                                                     2
+) in each sub-population are equal or not. Consequently, we
+must first test the hypothesis H0 : ??
+2
+1 = ??
+2
+2 against the alternative hypothesis
+H1 : ??
+2
+1 6= ??
+2
+2
+. The test statistic is F =
+  ??^
+2
+1
+??^
+2
+2
+and under the null hypothesis this
+quantity follows a Fisher's distribution with, respectively, n1???1 and n2???1 degrees of freedom (where n1 and n2 are the sample size in each sub-population).
+. If we accept the equality of the two variances, we test the equality of
+the two means using the following t-test. The variance of the difference
+(X¯
+  1???X¯
+  2) is equal to ^??
+2
+D =
+  (n1???1)^??
+2
+1+(n2???1)^??
+2
+2
+n1+n2???2
+
+1
+n1
++
+  1
+n2
+
+. The test statistic
+is T =
+  X¯1???X¯2
+??^D
+and, under the null hypothesis (H0 : µ1 = µ2), this quantity
+follows a Student's t distribution with n1 + n2 ??? 2 degrees of freedom.
+. If we reject the equality of the two variances, we test the equality of the
+two means using Welch's t-test. The variance of the difference (X¯
+                                                                1???X¯
+                                                                2) is
+equal to ^??
+2
+D =
+  ??^
+2
+1
+n1
++
+  ??^
+2
+2
+n2
+. The test statistic is T =
+  X¯1???X¯2
+??^D
+and, under the null
+hypothesis (H0 : µ1 = µ2), this quantity follows a Student's t distribution
+with ?? degrees of freedom, where 1
+?? =
+  1
+n1???1
+
+??^
+2
+1/n1
+??^
+2
+D
+2
++
+  1
+n2???1
+
+??^
+2
+2/n2
+??^
+2
+D
+2
+.
+6.3.2 Example
+We want to compare the weights of male and female adult octopuses. We
+have a dataset with fifteen male and thirteen female octopuses fished off the
+coast of Mauritania. Table 6.1 features an extract from the dataset.
+TABLE 6.1
+Extract from the Octopus
+Dataset (weight in grams)
+Weight Sex
+300 Female
+700 Female
+850 Female
+.
+.
+.
+.
+.
+.
+5400 Male
+Comparison of Two Means 119
+We would like to test the equality of the unknown theoretical mean female
+(µ1) and male (µ2) octopus weights, with a type-one error rate set at 5%.
+6.3.3 Steps
+1. Read the data.
+2. Compare the two sub-populations graphically.
+3. Calculate the descriptive statistics (mean, standard deviation, and quartiles) for each sub-population.
+4. (Optional) Test the normality of the data in each sub-population.
+5. Test the equality of variances.
+6. Test the equality of means.
+6.3.4 Processing the Example
+1. Reading the data:
+  > octopus <- read.table("Octopus.csv",header=T,sep=";")
+Summary of the dataset:
+  > summary(octopus)
+Weight Sex
+Min. : 300 Female:13
+1st Qu.:1480 Male :15
+Median :1800
+Mean :2099
+3rd Qu.:2750
+Max. :5400
+Using this procedure, we obtain descriptive statistics and we can check that
+the variable Weight is quantitative and that the variable Sex is qualitative. Be aware that if, for example, the categories of the variable Sex were
+coded 1 and 2, it would be necessary to transform this variable into a factor prior to any analysis as R would consider it to be quantitative (see Section 1.4.2, p. 7). In order to do so, we would write octopus[,"Sex"] <-
+  factor(octopus[,"Sex"]).
+2. Comparing the two sub-populations graphically:
+  Before any analysis, it may be interesting to visualise the data. Boxplots are
+used to compare the distribution of weights in each category of the variable
+Sex:
+  120 R for Statistics
+> boxplot(Weight ~ Sex, ylab="Weight", xlab="Sex", data=octopus)
+Figure 6.3 shows that the males are generally heavier than the females as both
+weight medians and quartiles are greater for males.
+Female Male
+1000 2000 3000 4000 5000
+Sex
+Weight
+Figure 6.3
+Boxplots of octopus weights according to sex.
+3. Calculating the descriptive statistics for each sub-population:
+  Now calculate the mean, standard deviation and quartiles for each sex using
+the tapply function (the argument na.rm = TRUE is in fact useless here as
+                     there is no missing data):
+  > tapply(octopus[,"Weight"], octopus[,"Sex"], mean, na.rm=TRUE)
+Female Male
+1405.385 2700.000
+> tapply(octopus[,"Weight"], octopus[,"Sex"], sd, na.rm=TRUE)
+Female Male
+621.9943 1158.3547
+> tapply(octopus[,"Weight"],octopus[,"Sex"],quantile,na.rm=TRUE)
+$Female
+0% 25% 50% 75% 100%
+300 900 1500 1800 2400
+$Male
+0% 25% 50% 75% 100%
+1150 1800 2700 3300 5400
+4. (Optional) Testing the normality of the data in each sub-population:
+  In order to construct the comparison of means test, we assume that the mean
+estimator in each sub-population follows a normal distribution. This is true
+Comparison of Two Means 121
+if the data is normally distributed or if the sample size is large enough (in
+                                                                           practice, greater than 30, thanks to the central limit theorem). Here there are
+less than thirty individuals; therefore data normality must be tested for each
+sub-population. In order to do so, the Shapiro-Wilk test is used. To test the
+normality of the males alone, select the weight of the males by requiring that
+the qualitative variable Sex carries the category Male. Rows are selected by
+building the logic vector select.males. The components of this vector are
+TRUE for males and are otherwise FALSE. We then conduct the Shapiro-Wilk
+test on the individuals in this selection. Before conducting the Shapiro-Wilk
+test, we draw the normal QQ-plot that gives an account of probability plotting
+for informal assessment of normality (see Figure 6.4):
+  Figure 6.4
+Normal QQ-plot for male octopus weights.
+> select.males <- octopus[,"Sex"]=="Male"
+> qqnorm(octopus[select.males,"Weight"])
+> qqline(octopus[select.males,"Weight"],col="grey")
+> shapiro.test(octopus[select.males,"Weight"])
+Shapiro-Wilk normality test
+data: octopus[select.males, "Weight"]
+W = 0.935, p-value = 0.3238
+122 R for Statistics
+As the p-value associated with the test is greater than 5%, the normality of
+the males' weights is accepted. We will not provide the output for the females,
+but the assumption of normality is also accepted.
+When the assumption of normality is rejected, the test of equality of means can
+be conducted using non-parametric tests such as that of Wilcoxon (wilcox.test)
+or Kruskal-Wallis (kruskal.test).
+5. Testing the equality of variances:
+  In order to compare the mean of the two male and female sub-populations,
+there are two possible types of tests: one in which the unknown variances of the
+two sub-populations are different and the other in which they are equal. We
+must therefore test the equality of variances H0 : ??
+2
+1 = ??
+2
+2 against H1 : ??
+2
+1 6= ??
+2
+2
+using an F-test:
+  > var.test(Weight ~ Sex, conf.level=.95,data=octopus)
+F test to compare two variances
+data: Weight by Sex
+F = 0.2883, num df = 12, denom df = 14, p-value = 0.03713
+alternative hypothesis: true ratio of variances is
+not equal to 1
+95 percent confidence interval:
+  0.0945296 0.9244467
+sample estimates:
+  ratio of variances
+0.2883299
+The p-value associated with the test of comparison of variances is 0.037: H0
+can therefore be rejected and we can thus consider that the variances are
+significantly different. The variance ratio (^??1/??^2) is 0.288 and the confidence
+interval for this ratio (to 95%) is [0.09 ; 0.92]. In the variance ratio, the
+numerator is the variance of the weights at the first level of the variable
+Sex alphabetically (here, Female) and the denominator is the variance of the
+weights at the second level of the variable Sex.
+6. Testing the equality of means:
+  We here use the t.test function. As the variances are different, Welch's test is
+used to compare the means. In order to do so, specify that the variances are
+unequal using the argument var.equal=FALSE. If the variance were equal, we
+would have used a Student's t-test with the argument var.equal=TRUE. The
+default test is bilateral (alternative='two.sided'), however the alternative
+hypothesis H1 may be that the males are lighter (alternative="less") or
+heavier (alternative="greater"). We here consider the category of reference to be Female (first level of the variable Sex) and the other category is
+tested according to this reference.
+Comparison of Two Means 123
+> t.test(Weight~Sex, alternative='two.sided', conf.level=.95,
+         var.equal=FALSE, data=octopus)
+Welch Two Sample t-test
+data: Weight by Sex
+t = -3.7496, df = 22.021, p-value = 0.001107
+alternative hypothesis: true difference in means
+is not equal to 0
+95 percent confidence interval:
+  -2010.624 -578.607
+sample estimates:
+  mean in group Female mean in group Male
+1405.385 2700.000
+The p-value (0.001) associated with the test of unequal variances indicates
+that the means are significantly different. The mean weight for males within
+the population (estimated at 2700 g) is thus significantly different from that
+of females (estimated at 1405 g).
+6.3.5 Rcmdr Corner
+1. Reading the data from a file:
+  Data ??? Import data ??? from text file, clipboard, or URL ...
+It must then be specified that the column separator is ";".
+To check that the dataset has been imported successfully:
+  Statistics ??? Summaries ??? Active data set
+2. Comparing the two sub-populations graphically:
+  Graphs ??? Boxplot...
+Then click on Plot by groups... to obtain one box for each category of the
+qualitative variable (Identify outliers with mouse is used to identify the
+                      extreme individuals, i.e. those beyond the boxplots).
+3. Calculating the descriptive statistics for each sub-population:
+  Statistics ??? Summaries ??? Numerical summaries...
+Then click on Summarize by groups...
+4. (Optional) Testing the normality of the data in each sub-population:
+  Be aware that the test for normality is conducted for the overall data and
+cannot be conducted directly on a subset. It is therefore necessary to define
+the subsets.
+Data ??? Active data set ??? Subset active data set...
+124 R for Statistics
+The subset is determined using Subset expression (type Sex == "Male")
+and it is essential to rename the dataset in order not to lose the original (Name
+                                                                             for new data set).
+We can then conduct the Shapiro-Wilk test:
+  Statistics ??? Summaries ??? Shapiro-Wilk test of normality...
+We then come back to the original data in order to conduct the same analysis
+for the females: We again select the initial dataset as active by clicking on
+Data. We conduct the test of normality for the females (in the same way as
+                                                        for the males). We then select the initial dataset.
+In summary, all of this is somewhat restrictive and it is preferable to conduct
+these tests via a command line.
+5. Testing the equality of variances:
+  Statistics ??? Variances ??? Two-variances F-test...
+Choose the qualitative variable (Groups (pick one)), the quantitative variable (Response variable (pick one)) and the alternative test hypothesis
+(by default, the alternative hypothesis is that the variances are different and
+  the test is Two-sided).
+6. Testing the equality of means:
+  Statistics ??? Means ??? Independent samples t-test...
+Choose the qualitative variable (Groups (pick one)), the quantitative variable (Response variable (pick one)) and the alternative test hypothesis
+(by default, the alternative hypothesis is that the means are different and the
+  test is Two-sided). Specify whether you consider the variances to be equal or
+unequal (Assume equal variances?).
+6.3.6 Taking Things Further
+If we need to compare more than two means, a number of tests are available.
+The choice of test depends whether or not the variances in each sub-population
+are equal. If the variances are equal, refer to the worked example on one-way
+analysis of variance (p. 157); if the variances are unequal, use the function
+oneway.test (Welch, 1951). Bartlett's test (bartlett.test) can be used to test
+equality of variances.
+Both the tests of comparisons of variance and of means are explained in
+detail in most books such as Clarke and Cooke (2004).
+Testing Conformity of a Proportion 125
+6.4 Testing Conformity of a Proportion
+6.4.1 Objective
+The aim of this worked example is to test the equality of a proportion ?? at a
+given value ??0. If P is the estimator of ?? and n the sample size, nP follows
+a binomial distribution with parameters n and ??. This distribution allows
+one to perform an exact test about the probability of success in a Bernoulli
+experiment.
+This test can also be used to test the equality of two proportions. Indeed,
+testing ??1 = ??2 remains to test ??1 = 0.5.
+6.4.2 Example
+We are interested in the intention to vote for a candidate A in the second
+round of presidential elections. In a poll of 1040 voters, candidate A wins
+52.4% of the vote. Can we consider to the 95% threshold that this candidate
+will win the election? Implicitly, we assume that the sample is representative
+of the population as a whole, drawn with replacement, and that the voters
+will vote as predicted by the poll. However, simple random polls use samples
+drawn without replacement. Nevertheless, the procedure explained below is a
+reasonable approximation when the poll rate is low, that is, when the size of
+the population is much greater than that of the sample.
+6.4.3 Step
+Test the equality of the proportion to 50% with a type-one error rate of 5%.
+6.4.4 Processing the Example
+As an alternative hypothesis to the test of the equality of a proportion of
+50%, we choose the percentage of voting intentions to be greater than 50%
+  (alternative="greater"). The success rate (i.e. the number of votes for
+                                             candidate A) must be a whole number. We therefore round the decimal yielded
+by the problem to the nearest whole number (using the round function with
+                                            0 decimal digits). We then use the binom.test function, but the prop.test
+function yields exactly the same result:
+  > nbr.vot.A <- round(0.524 * 1040,0)
+> binom.test(nbr.vot.A, n=1040, p=0.5, alternative="greater")
+Exact binomial test
+data: nbr.vot.A and 1040
+nb of successes = 545, nb of trials = 1040, p-value = 0.06431
+126 R for Statistics
+alternative hypothesis: true probability of success is > 0.5
+95 percent confidence interval:
+  0.4980579 1.0000000
+sample estimates:
+  probability of success
+0.5240385
+As the p-value is greater than 5%, we accept the hypothesis that the proportion is equal to 50%: we cannot therefore confirm from this poll that
+candidate A will win the election.
+The previous exact binomial test yields a confidence interval for the proportion at the 95% level. However, since we have constructed a unilateral
+test, this interval places all the error (i.e. 5%) on one side. More precisely, the interval provided is of the format [a, 1] where a is determined so as
+Pr(a ??? p ??? 1) ??? 0.95. To obtain a confidence interval of the format [a, b], with
+approximately 2.5% on each side, a bilateral test is required (two.sided), and
+this is the default option:
+  > binom.test(nbr.vot.A,n=1040)
+Exact binomial test
+data: nbr.vot.A and 1040
+number of successes=545, number of trials=1040, p-value=0.1286
+alternative hypothesis: true probability of success
+is not equal to 0.5
+95 percent confidence interval:
+  0.4931733 0.5547673
+sample estimates:
+  probability of success
+0.5240385
+Strictly speaking, the unknown probability p estimated at 0.524 either does or
+does not belong to the interval [0.493, 0.555]. It is therefore within the interval
+with a probability of 0 or 1. However, the overall procedure guarantees that,
+if it were to be repeated infinitely with new samples of the same size n = 1040
+participants, 95% of the confidence intervals would contain the true unknown
+value p. In practice, even if that is not the case, it is quicker to say that the
+percentage of voting intentions is between 49.3% and 55.5%.
+6.4.5 Rcmdr Corner
+There is no test for the conformity of a proportion in Rcmdr.
+6.4.6 Taking Things Further
+The tests of conformity to a proportion are explained in detail in most books
+such as Moore et al. (2007).
+Comparing Several Proportions 127
+6.5 Comparing Several Proportions
+6.5.1 Objective
+The aim of this worked example is to test the equality of several proportions.
+6.5.2 Example
+We shall again examine the example of hair colour for boys and girls in a
+Scottish county (see Worked Example 6.2, p. 113):
+  Fair Red Medium Dark Jet Black
+Boys 592 119 849 504 36
+Girls 544 97 677 451 14
+We would like to compare the proportions of boys for different groups, which
+here is different hair colours. We will test whether or not these proportions
+are equal in all the groups, with a type-one error set at 5%.
+6.5.3 Step
+Test the equality of proportions for boys (for different hair colours).
+6.5.4 Processing the Example
+To conduct the test of equality of proportions, we provide a list with the
+number of boys for each hair colour, then a list with the total number of
+individuals for each hair colour:
+  > prop.test(c(592,119,849,504,36),n=c(1136,216,1526,955,50))
+5-sample test for equality of proportions without continuity
+correction
+data: c(592,119,849,504,36) out of c(1136,216,1526,955,50)
+X-squared = 10.4674, df = 4, p-value = 0.03325
+alternative hypothesis: two.sided
+sample estimates:
+  prop 1 prop 2 prop 3 prop 4 prop 5
+0.5211268 0.5509259 0.5563565 0.5277487 0.7200000
+Significant differences between proportions can thus be confirmed (the pvalue is lower than 5%). We can see that the proportion of boys estimated for
+the jet black group is much greater than for the other groups. Note that the
+128 R for Statistics
+test which is performed is a chi-square test of independence and the results are
+exactly the same as the ones obtained in the worked example on chi-square
+(p. 113).
+6.5.5 Rcmdr Corner
+There is no test of comparison of proportions in Rcmdr.
+6.5.6 Taking Things Further
+The prop.test function can also be applied in cases where there are two proportions (corresponding to two variables with two categories) as Yates' correction
+for continuity is offered by default in this situation.
+Tests for equality of proportions are explained in detail in books such as
+Moore et al. (2007).
+Power of a Test 129
+6.6 The Power of a Test
+6.6.1 Objective
+The aim of this worked example is to calculate the power of the test of equality
+of means of two sub-populations. The test of equality of means is used to
+choose between the hypothesis H0 : µ1 = µ2 and the alternative hypothesis
+H1 : µ1 6= µ2 (or H1 : µ1 > µ2 or H1 : µ1 < µ2) (see Worked Example 6.3).
+The power of the test is the probability of rejecting the hypothesis H0 when
+H1 is true. Power is equal to 1 ??? ??, ?? being the type-two error (that is to
+                                                                 say, the risk of mistakenly accepting H0). The power therefore corresponds
+to the probability of detecting a difference in means, if indeed this difference
+exists. The advantage of calculating the power of a test prior to conducting
+an experiment lies mainly in the ability to optimise the number of trials (i.e.
+                                                                           statistical individuals) according to the aim of the experimenter. Indeed, the
+power of the test is directly related to the number of individuals per group
+(n), the amplitude of the difference that we want to detect (??), the within
+-group variability (??), and the type-one error (??).
+6.6.2 Example
+We now examine the example of an experiment in milk production. Researchers at INRA (the French National Institute for Agricultural Research)
+selected two genetically different types of dairy cow according to the volume
+of milk produced. The aim is to detect a potential difference in the protein
+levels in the milks produced by these two sub-populations.
+During a previous study, the standard deviation of protein levels in the
+milk from a herd of Normandy cows was found to be 1.7 g/kg of milk. As
+an approximation we will therefore use the standard deviation ?? = 1.7 and
+use the classical ?? = 5% threshold. The aim is to have ?? = 80% chance
+of detecting a difference in the means of the protein levels of ?? = 1 g/kg of
+milk from the two populations. To meet this objective, we will determine the
+number of dairy cows required using the function power.t.test.
+6.6.3 Steps
+1. Calculate the number of individuals required to obtain a power of 80%.
+2. Calculate the power of the test with twenty individuals per group.
+3. Calculate the difference of means detectable at 80% with twenty individuals
+per group.
+130 R for Statistics
+6.6.4 Processing the Example
+1. Calculating the number of individuals required to obtain a power of 80%:
+  > power.t.test(delta=1, sd=1.7, sig.level=0.05, power=0.8)
+Two-sample t test power calculation
+n = 46.34674
+delta = 1
+sd = 1.7
+sig.level = 0.05
+power = 0.8
+alternative = two.sided
+NOTE: n is number in *each* group
+Here we can see that a minimum of 47 individuals are required per population
+in order to have more than an 80% chance of detecting a difference in means
+in the protein levels of 1 g/kg of milk between the two populations.
+2. Calculating the power of the test with twenty individuals per group:
+  > power.t.test(n=20, delta=1, sd=1.7, sig.level=0.05)$power
+[1] 0.4416243
+If we decide to use only twenty cows per population in the experiment, there
+will be a 44% chance of detecting a difference in means in the protein levels
+of 1 g/kg of milk between the two populations.
+3. Calculating the difference detectable at 80% with twenty individuals per
+group:
+  > power.t.test(n=20, sd=1.7, sig.level=0.05, power=0.8)$delta
+[1] 1.545522
+If we decide to use only twenty cows per population in the experiment, there
+will then be an 80% chance of detecting a difference in means in the protein
+levels of 1.55 g/kg of milk between the two populations.
+6.6.5 Rcmdr Corner
+It is not possible to calculate the power of a test with Rcmdr.
+Power of a Test 131
+6.6.6 Taking Things Further
+If we want to compare more than two means, and if we suppose that the variances in each sub-population are equal, we can construct a one-way analysis of
+variance model (see p. 157). In order to calculate the power of the test beforehand, use function power.anova.test and then test the overall effect. In order
+to do so, we must first have an idea of the within-group variance (or residual
+                                                                   mean square) which will be observed, as well as defining the between-group
+variance (or mean square associated to the factor) that we wish to detect.
+We examine the same example, but this time consider that there are three
+genetic populations. We again assume that the residual standard deviation
+of the protein level is 1.7 g/kg of milk and that we want to detect (with a
+                                                                     threshold 5%) whether there really is a difference between the three populations if the true means of protein levels are, for example, 28, 30 and 31 g/kg,
+respectively.
+> 1.7^2
+[1] 2.89
+> var(c(28, 30, 31))
+[1] 2.333333
+> power.anova.test(groups=3, between.var=2.3333,
+                   within.var=2.89, power=.80)
+Balanced one-way analysis of variance power calculation
+groups = 3
+n = 7.067653
+between.var = 2.3333
+within.var = 2.89
+sig.level = 0.05
+power = 0.8
+NOTE: n is number in each group
+The foreseen residual variance is 2.89 g2/kg2 and the between-group variance that we want to detect as significant is 2.33 g2/kg2
+. We consider that
+eight cows are therefore needed per group in order to have an 80% chance
+of detecting the effect of the genetical population on the protein level of the
+milk.
+The power of a t-test for mean comparison is explained in books such as
+Clarke and Cooke (2004). The power of an F-test in analysis of variance is
+described in Sahai and Ageel (2000), for example.
+This page intentionally left blank
+7
+Regression
+7.1 Simple Linear Regression
+7.1.1 Objective
+Simple linear regression is a statistical method used to model the linear relationship between two quantitative variables for explanatory or prediction
+purposes. Here we have one explanatory variable (denoted X) and one response variable (denoted Y ), connected by the following model:
+  Y = ??0 + ??1X + ??
+where ?? is the variable for noise or measurement error rate. The parameters
+??0 and ??1 are unknown. The aim is to estimate them from a sample of n pairs
+(x1, y1), . . . ,(xn, yn). The model is written in indexed form:
+  yi = ??0 + ??1xi + ??i
+The ??0 coefficient corresponds to the intercept and ??1 to the slope. We estimate these parameters by minimising the least-square criterion
+(??^
+  0, ??^
+  1) = argmin
+??0,??1
+Xn
+i=1
+(yi ??? ??0 ??? ??1xi)
+2
+Once the parameters have been estimated (??^
+                                         0 and ??^
+                                         1), we obtain the
+regression line:
+  f(x) = ??^
+0 + ??^
+1x
+from which predictions can be made. The adjusted or smoothed values are
+defined by
+y^i = ??^
+0 + ??^
+1xi
+and the residuals by
+??^i = yi ??? y^i
+Analysing the residuals is essential as it is used to check the individual fitting
+(outlier) and the global fitting of the model, for example by checking that
+there is no structure.
+134 R for Statistics
+7.1.2 Example
+Air pollution is currently one of the most serious public health worries worldwide. Many epidemiological studies have proved the influence that some chemical compounds such as sulphur dioxide (SO2), nitrogen dioxide (NO2), ozone
+(O3) or other air-borne dust particles can have on our health.
+Associations set up to monitor air quality are active all over France to
+measure the concentration of these pollutants. They also keep a record of
+meteorological conditions such as temperature, cloud cover, wind, etc.
+Here we analyse the relationship between the maximum daily ozone level
+(in µg/m3
+) and temperature. We have at our disposal 112 observations collected during the summer of 2001 in Rennes (France).
+7.1.3 Steps
+1. Read the data.
+2. Represent the scatterplot (xi
+                              , yi).
+3. Estimate the parameters.
+4. Draw the regression line.
+5. Conduct a residual analysis.
+6. Predict a new value.
+7.1.4 Processing the Example
+1. Reading the data:
+  Read the data and summarise the variable of interest, here maxO3 and T12:
+  > ozone <- read.table("ozone.txt",header=T)
+> summary(ozone[,c("maxO3","T12")])
+maxO3 T12
+Min. : 42.00 Min. :14.00
+1st Qu.: 70.75 1st Qu.:18.60
+Median : 81.50 Median :20.55
+Mean : 90.30 Mean :21.53
+3rd Qu.:106.00 3rd Qu.:23.55
+Max. :166.00 Max. :33.50
+2. Representing the scatterplot (xi
+                                 , yi):
+  > plot(maxO3~T12,data=ozone,pch=15,cex=.5)
+Simple Linear Regression 135
+Each point on the graph (Figure 7.1) represents, for a given day, a temperature
+measurement taken at midday, and the ozone peak for the day. From this
+graph, the relationship between temperature and ozone concentration seems
+to be linear.
+15 20 25 30
+40 60 80 100 120 140 160
+T12
+maxO3
+Figure 7.1
+Representation of pairs (xi
+                         , yi) with a scatterplot.
+3. Estimating the parameters:
+  The lm function (linear model) is used to fit a linear model:
+  > simple.reg <- lm(maxO3~T12,data=ozone)
+> summary(simple.reg)
+Call:
+  lm(formula = maxO3 ~ T12, data = ozone)
+Residuals:
+  Min 1Q Median 3Q Max
+-38.0789 -12.7352 0.2567 11.0029 44.6714
+Coefficients:
+  Estimate Std. Error t value Pr(>|t|)
+(Intercept) -27.4196 9.0335 -3.035 0.003 **
+  T12 5.4687 0.4125 13.258 <2e-16 ***
+  ---
+  Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Residual standard error: 17.57 on 110 degrees of freedom
+Multiple R-Squared: 0.6151, Adjusted R-squared: 0.6116
+F-statistic: 175.8 on 1 and 110 DF, p-value: < 2.2e-16
+Amongst other things, we obtain a Coefficient matrix which, for each pa-
+  136 R for Statistics
+rameter (each row), has four columns: its estimation (Estimate column), its
+estimated standard deviation (Std. Error), the observed value statistic for
+the test H0 : ??j = 0 against H1 : ??j 6= 0. Finally, the p-value (Pr(>|t|))
+yields the probability to obtain such a large statistic under H0.
+Coefficients ??0 and ??1 are estimated by ???27.4 and 5.5. The test of significance
+for the coefficients here gives p-values of 0.003 and around 2. 10???16. Thus, the
+null hypothesis for each of these tests is rejected in favour of the alternative
+hypothesis. The p-value of less than 5% for the constant (intercept) indicates
+that the constant must appear in the model. The p-value less than 5% for the
+slope indicates a significant link between maxO3 and T12.
+The summary of the estimation step features the estimation of residual standard deviation ??, which here is 17.57, as well as the corresponding number of
+degrees of freedom n ??? 2 = 110.
+The value of R2 and adjusted R2 are also given. The value of R2
+is rather high
+(R2 = 0.6151), thus supporting the suspected linear relationship between the
+two variables. In other words, 61% of the variability of maxO3 is explained by
+T12.
+The final row, which is particularly useful for multiple regression, indicates
+the result of the test of the comparison between the model used and the model
+using only the constant as explanatory variable.
+We can consult the list of different results (components of the list, see Section 1.4.7, p. 20) of the object simple.reg using
+> names(simple.reg)
+[1] "coefficients" "residuals" "effects" "rank"
+[5] "fitted.values" "assign" "qr" "df.residual"
+[9] "xlevels" "call" "terms" "model"
+We can then retrieve the coefficients using
+> simple.reg$coef
+(Intercept) T12
+-27.419636 5.468685
+or by using the coef function:
+  > coef(simple.reg)
+To fit the model without the constant, we proceed as follows:
+  > reg.without.intercept <- lm(maxO3~T12-1, data=ozone)
+4. Drawing the regression line:
+  We can simply apply the following command to obtain Figure 7.2:
+  Simple Linear Regression 137
+> plot(maxO3~T12,data=ozone,pch=15,cex=.5)
+> abline(simple.reg)
+15 20 25 30
+40 60 80 100 120 140 160
+T12
+maxO3
+Figure 7.2
+Scatterplot and regression line.
+5. Conducting a residual analysis:
+  The residuals are obtained using the residuals function; however, these residuals do not have the same variance (heteroscedastic). We therefore need to
+use and plot (Figure 7.3) studentised residuals, which have the same variance.
+> res.simple<-rstudent(simple.reg)
+> plot(res.simple,pch=15,cex=.5,ylab="Residuals")
+> abline(h=c(-2,0,2),lty=c(2,1,2))
+0 20 40 60 80 100
+???3 ???2 ???1 0 1 2 3
+Index
+Residuals
+Figure 7.3
+Representation of residuals.
+138 R for Statistics
+In theory, 95% of the studentised residuals can be found in the interval [???2, 2].
+This is the case here because only four residuals are found outside this interval.
+6. Predicting a new value:
+  As we now have a new observation xnew, we can simply use the estimations
+to predict the corresponding Y value. However, the predicted value is of
+little interest without its corresponding confidence interval. Let us examine
+an example of this. Here, we have a new temperature observation T12 equal
+to 19 degrees for 1st October 2001.
+> xnew <- 19
+> xnew <- as.data.frame(xnew)
+> colnames(xnew) <- "T12"
+> predict(simple.reg,xnew,interval="pred")
+fit lwr upr
+[1,] 76.48538 41.4547 111.5161
+It must be noted that the xnew argument of the predict function must be a
+data-frame in which the names of the explanatory variables are the same as in
+the original dataset (here T12). The predicted value is 76.5 and the prediction
+interval at 95% is [41.5, 111.5]. To represent, on one single graph, the confidence interval of a fitted value along with that of a prediction, we calculate
+these intervals for all the points which were used to draw the regression line.
+We make the two appear on the same graph (Figure 7.4).
+> gridx <- data.frame(T12=seq(min(ozone[,"T12"]),
+                              max(ozone[,"T12"]),length=100))
+> CIline <- predict(simple.reg,new=gridx,
+                    interval="conf",level=0.95)
+> CIpred <- predict(simple.reg,new=gridx,
+                    interval="pred",level=0.95)
+> plot(maxO3~T12,data=ozone,pch=15,cex=.5)
+> matlines(gridx,cbind(CIline,CIpred[,-1]),
+           lty=c(1,2,2,3,3),col=1)
+> legend("topleft",lty=2:3,c("pred","conf"))
+7.1.5 Rcmdr Corner
+1. Reading the data from a file:
+  Data ??? Import data ??? from text file, clipboard, or URL ...
+Next specify that the field separator is the space and the decimal-point character is ".".
+To check that the dataset has been imported successfully:
+  Statistics ??? Summaries ??? Active data set
+Simple Linear Regression 139
+15 20 25 30
+40 60 80 100 120 140 160
+T12
+maxO3
+conf
+pred
+Figure 7.4
+Confidence and prediction intervals.
+2. Representing the scatterplot graphically (xi
+                                             , yi):
+  Graphs ??? Scatterplot... Then select variables x and y. It is possible to
+identify specific points using the mouse. By default, a boxplot is drawn for
+each variable x and y, the regression line is drawn as well as a smoothing
+curve, but it is possible to uncheck these options in the dialogue box.
+3. Estimating the parameters:
+  Statistics ??? Fit models ??? Linear regression... then select the explanatory variable (x) and the response variable (y). It is then possible to
+obtain a confidence interval for each parameter of the regression (??0 and ??1):
+  Models ??? Confidence intervals...
+4. Drawing the regression line:
+  The regression line is drawn when we create the cloud of points (see item 2).
+5. Conducting a residual analysis:
+  Models ??? Add observation statistics to data...
+We can then add to the dataset the fitted values, the residuals, the studentised
+residuals, the estimated values and Cook's distances. We can then construct
+graphs using these new variables. Many graphs are available directly:
+  Models ??? Graphs ??? Basic diagnostic plots
+6. Predicting a new value:
+  It is not possible to predict a new value automatically with Rcmdr.
+7.1.6 Taking Things Further
+Theoretical reminders about linear regression are available in many books,
+such as Clarke and Cooke (2004), Moore et al. (2007) or Faraway (2005).
+140 R for Statistics
+7.2 Multiple Linear Regression
+7.2.1 Objective
+Multiple linear regression consists of explaining and/or predicting a quantitative variable Y by p quantitative variables X1, · · · , Xp. The multiple regression model is a generalisation of the simple regression model (see Worked
+                                                                                                                                                                                                                            Example 7.1). We therefore suppose that the n data collected conform to the
+following model:
+  yi = ??0 + ??1xi1 + ??2xi2 + · · · + ??pxip + ??i
+, i = 1, · · · , n, (7.1)
+where xij are known numbers measuring the explanatory variables which are
+organised within a matrix X known as the experimental design matrix. The
+parameters ??j of the model are unknown and need to be estimated. The
+parameter ??0 (intercept) corresponds to the constant of the model. The ??i
+are random unknown variables and represent errors of measurement.
+By writing the model 7.1 in the form of a matrix, we obtain
+Y = X ?? + ?? (7.2)
+Y =
+  ???
+??????
+y1
+.
+.
+.
+yn
+???
+?????? , X =
+  ???
+??????
+1 x11 . . . x1p
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+.
+1 xn1 . . . xnp
+???
+?????? , ?? =
+  ???
+??????
+??0
+.
+.
+.
+??p
+???
+?????? , ?? =
+  ???
+??????
+??1
+.
+.
+.
+??n
+???
+??????
+From these observations, we estimate the unknown parameters of the model
+by minimising the least-square criterion:
+  ??^ = argmin
+??0,··· ,??p
+Xn
+i=1
+???
+???yi ??? ??0 ???
+Xp
+j=1
+??jxij
+???
+???
+2
+= argmin
+?????Rp+1
+(Y ??? X??)
+0
+(Y ??? X??)
+If matrix X is full rank, that is to say, if the explanatory variables are not
+collinear, the least square estimator ??^ of ?? is
+??^ = (X
+      0X)
+???1X
+0Y
+Once the parameters have been estimated, we can calculate the fitted
+values:
+  y^i = ??^
+0 + ??^
+1xi1 + · · · + ??^
+pxip
+or predict new values. The difference between the observed value and the
+fitted value is, by definition, the residual:
+  ??^i = yi ??? y^i
+Analysing the residuals is essential as it is used to check the individual fitting
+of the model (outlier) and the global fitting, for example by checking that
+there is no structure.
+Multiple Linear Regression 141
+7.2.2 Example
+We reexamine the ozone dataset introduced in Worked Example 7.1 (p. 133).
+Here we analyse the relationship between the maximum daily ozone level (in
+                                                                        µg/m3
+) and temperature at different times of day, cloud cover at different
+times of day, the wind projection on the East-West axis at different times
+of day and the maximum ozone concentration for the day before the day in
+question. The data was collected during the summer of 2001 and the sample
+size is 112.
+7.2.3 Steps
+1. Read the data.
+2. Represent the variables.
+3. Estimate the parameters.
+4. Choose the variables.
+5. Conduct a residual analysis.
+6. Predict a new value.
+7.2.4 Processing the Example
+1. Reading the data:
+  Read the data and choose the variables of interest, here the response variable,
+maximum ozone, denoted maxO3, and the explanatory variables: temperature,
+cloud cover, wind projection on the East-West axis at 9am, midday, and 3pm,
+as well as the ozone maximum from the previous day max03y.
+> ozone <- read.table("ozone.txt",header=T)
+> ozone.m <- ozone[,1:11]
+> names(ozone.m)
+[1] "maxO3" "T9" "T12" "T15" "Ne9" "Ne12"
+[7] "Ne15" "Wx9" "Wx12" "Wx15" "maxO3y"
+Names are attributed using the names or colnames function. It can be interesting to summarise these variables (summary) or to represent them.
+2. Representing the variables:
+  In order to make sure that there are no errors during input, it is important to
+conduct a univariate analysis of each variable (histogram, for example). When
+there are not many variables, they can be represented two by two on the same
+graph using the pairs function (here pairs(ozone.m)). It is also possible to
+explore the data using a principal component analysis with the illustrative
+explanatory variable (see Worked Example 10.1, p. 209).
+142 R for Statistics
+3. Estimating the parameters:
+  To estimate the parameters, we must first write the model. Here, we use
+lm (linear model) with a formula (see Appendix A.2, p. 266), as with simple
+regression. Here, there are ten explanatory variables and it would therefore be
+fastidious to write all of them. R software can be used to write them quickly,
+using the command
+> reg.mul <- lm(maxO3~.,data=ozone.m)
+> summary(reg.mul)
+Call:
+  lm(formula = maxO3 ~ ., data = ozone.m)
+Residuals:
+  Min 1Q Median 3Q Max
+-53.566 -8.727 -0.403 7.599 39.458
+Coefficients:
+  Estimate Std. Error t value Pr(>|t|)
+(Intercept) 12.24442 13.47190 0.909 0.3656
+T9 -0.01901 1.12515 -0.017 0.9866
+T12 2.22115 1.43294 1.550 0.1243
+T15 0.55853 1.14464 0.488 0.6266
+Ne9 -2.18909 0.93824 -2.333 0.0216 *
+  Ne12 -0.42102 1.36766 -0.308 0.7588
+Ne15 0.18373 1.00279 0.183 0.8550
+Wx9 0.94791 0.91228 1.039 0.3013
+Wx12 0.03120 1.05523 0.030 0.9765
+Wx15 0.41859 0.91568 0.457 0.6486
+maxO3y 0.35198 0.06289 5.597 1.88e-07 ***
+  ---
+  Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Residual standard error: 14.36 on 101 degrees of freedom
+Multiple R-Squared: 0.7638, Adjusted R-squared: 0.7405
+F-statistic: 32.67 on 10 and 101 DF, p-value: < 2.2e-16
+As in simple linear regression (see Worked Example 7.1), outputs from the
+software are in the form of a matrix (under the name Coefficients) with four
+columns for each parameter: its estimate (column Estimate), its estimated
+standard deviation (Std. Error), the observed value of the test statistic for
+H0 : ??i = 0 against H1 : ??i 6= 0, and the p-value (Pr(>|t|)). The latter gives,
+as a test statistic under H0, the probability of exceeding the estimated value.
+Here, when they are tested one at a time, the significant variables are maxO3y
+and Ne9. However, since the regression is multiple and the explanatory variables are not orthogonal, it can be misleading to use these tests. Indeed,
+Multiple Linear Regression 143
+testing a coefficient means testing the significance of a variable whereas the
+other variables are in the model. In other words, this means testing that the
+variable does not provide any additional information, bearing in mind that
+all the other variables are within the model. It is therefore important to use
+procedures for choosing the models such as those presented below.
+The summary of the estimation step features the estimation of residual standard deviation ??, which here is 14.36, as well as the number of associated
+degrees of freedom n ??? 11 = 101.
+The last row indicates the result of the test of comparison between the model
+used and the model which uses only the constant as the explanatory variable.
+It is, of course, significant, as the explanatory variables provide information
+about the response variable.
+4. Choosing the variables:
+  It is possible to choose the variables by hand, step by step. We remove the least
+significant variable, T9, and then recalculate the estimations, and so on. In R
+the leaps package processes the choice of variables: The regsubsets function
+yields, for different criteria (Bayesian information criterion or BIC, adjusted
+                                R2
+                                , Mallows' Cp, etc.), the best model (if nbest=1) with one explanatory
+variable, two explanatory variables, ... with nvmax explanatory variables.
+The graphical representation helps to analyse the results.
+> library(leaps)
+> choice <- regsubsets(maxO3~.,data=ozone.m,nbest=1,nvmax=11)
+> plot(choice,scale="bic")
+bic
+(Intercept)
+T9
+T12
+T15
+Ne9
+Ne12
+Ne15
+Wx9
+Wx12
+Wx15
+maxO3y
+???97
+???110
+???110
+???120
+???120
+???120
+???130
+???130
+???140
+???140
+Figure 7.5
+Choosing variables with BIC.
+We can also determine the variables for the best model according to the BIC
+criterion using the following line of code:
+  144 R for Statistics
+> summary(choice)$which[which.min(summary(choice)$bic),]
+(Intercept) T9 T12 T15 Ne9 Ne12
+TRUE FALSE TRUE FALSE TRUE FALSE
+Ne15 Wx9 Wx12 Wx15 maxO3y
+FALSE TRUE FALSE FALSE TRUE
+The criterion is optimal for the top row of the graph. For the Bayesian information criterion (argument scale="bic"), we retain the model with four
+variables: T12, Ne9, Wx9 and maxO3y. We thus fit the model using the selected
+variables:
+  > final.reg <- lm(maxO3~T12+Ne9+Wx9+maxO3y,data=ozone.m)
+> summary(final.reg)
+Call:
+  lm(formula = maxO3 ~ T12 + Ne9 + Wx9 + maxO3y, data = ozone.m)
+Residuals:
+  Min 1Q Median 3Q Max
+-52.396 -8.377 -1.086 7.951 40.933
+Coefficients:
+  Estimate Std. Error t value Pr(>|t|)
+(Intercept) 12.63131 11.00088 1.148 0.253443
+T12 2.76409 0.47450 5.825 6.07e-08 ***
+  Ne9 -2.51540 0.67585 -3.722 0.000317 ***
+  Wx9 1.29286 0.60218 2.147 0.034055 *
+  maxO3y 0.35483 0.05789 6.130 1.50e-08 ***
+  ---
+  Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Residual standard error: 14 on 107 degrees of freedom
+Multiple R-Squared: 0.7622, Adjusted R-squared: 0.7533
+F-statistic: 85.75 on 4 and 107 DF, p-value: < 2.2e-16
+5. Conducting a residual analysis:
+  The observed residuals can be calculated using the residuals function on the
+output of the lm function (residuals(final.reg)). However, these residuals
+do not have the same variance (heteroscedastic). We therefore need to use
+studentised residuals, which have the same variance:
+  > res.m <- rstudent(final.reg)
+> plot(res.m,pch=15,cex=.5,ylab="Residuals")
+> abline(h=c(-2,0,2),lty=c(2,1,2))
+In theory, 95% of the studentised residuals can be found in the interval [???2, 2].
+Multiple Linear Regression 145
+This is the case here where only three residuals are found outside this interval
+(see Figure 7.6).
+0 20 40 60 80 100
+???3 ???2 ???1 0 1 2 3
+Index
+Residuals
+Figure 7.6
+Representation of residuals.
+6. Predicting a new value:
+  As we now have a new observation, we can simply use the estimators to predict
+the corresponding Y value. However, the predicted value is of little interest
+without its corresponding confidence interval. Let us examine an example
+of this. For 1st October 2001, we obtain the following values: maxO3y=70,
+T12=19, Ne9=8 and Wx9=2.05. It must be noted that the xnew argument
+of the predict function must be a data-frame with the same names as the
+explanatory variables of the original dataset.
+> xnew <- matrix(c(19,8,2.05,70),nrow=1)
+> colnames(xnew) <- c("T12","Ne9","Wx9","maxO3y")
+> xnew <- as.data.frame(xnew)
+> predict(final.reg,xnew,interval="pred")
+fit lwr upr
+[1,] 72.51437 43.80638 101.2224
+The predicted value is 72.5 and the confidence interval at 95% for the prediction is [43.8, 101.2].
+7.2.5 Rcmdr Corner
+1. Reading the data from a file:
+  Data ??? Import data ??? from text file, clipboard, or URL ...
+Next, specify that the field separator is the space and the decimal-point character is ".".
+146 R for Statistics
+To check that the dataset has been imported successfully:
+  Statistics ??? Summaries ??? Active data set
+2. Representing the data on a graph:
+  Graphs ??? Scatterplot... Then select variables x and y. Unfortunately,
+the only graphs available only represent the variables two by two.
+3. Calculating the parameters:
+  Statistics ??? Fit models ??? Linear regression... then select the explanatory variables (x) and the response variable (y). It is then possible to
+obtain a confidence interval for each parameter of the regression:
+  Models ??? Confidence intervals...
+4. Choosing the variables:
+  Many different models must be constructed and tested (the leaps package is not
+                                                        implemented): Models ??? Hypothesis tests ??? Compare two models...
+5. Conducting a residual analysis:
+  Models ??? Add observation statistics to data...
+We can add to the dataset the fitted values, the residuals, the studentised
+residuals, the predicted values, and Cook's distances, and create graphs with
+these new variables. Many graphs are available directly using
+Models ??? Graphs ??? Basic diagnostic plots
+6. Predicting a new value:
+  It is not possible to predict a new value automatically with Rcmdr.
+7.2.6 Taking Things Further
+Theoretical reminders and exercises on linear regression are available in many
+books, such as Clarke and Cooke (2004), Moore et al. (2007), Faraway (2005)
+or Fox and Weisberg (2011). Linear regression and many extensions are also
+available in Hastie et al. (2009).
+Partial Least Squares (PLS) Regression 147
+7.3 Partial Least Squares (PLS) Regression
+7.3.1 Objective
+PLS regression consists of predicting a quantitative variable Y from p quantitative variables X1, . . . , Xp. Multiple regression (Section 7.2) is also dedicated
+to this purpose. However, when the number p of explanatory variables is very
+large, or if it exceeds the number n of individuals to be analysed, it is difficult, or even impossible, to use the least squares method. PLS regression
+is then particularly suited for cases with data with large dimensions such as
+spectrometry data or genetic data.
+Put simply, PLS regression iteratively searches for a sequence of orthogonal components (or underlying variables). These components, known as PLS
+components, are chosen in order to maximise covariance with the explanatory variable Y . The choice of the number of components is important as it
+greatly influences the quality of the prediction. Indeed, if the chosen number is not sufficient, important information can be forgotten. However, if
+the chosen number is too big, the model may be overfitted. This choice is
+generally conducted using cross-validation or training/validation. These two
+procedures follow the same principle: The initial data is separated into two
+distinct parts, a training part and a validation part. There are generally more
+individuals in the training set than in the validation set. We construct the
+PLS regression model from the training set and then calculate the predictions
+on the validation set. We first construct the one-component PLS model and
+then repeat this procedure for 2, 3, . . . , k PLS components. The number of
+components retained corresponds to the model which leads to the minimum
+prediction error. This procedure is implemented in the pls package.
+7.3.2 Example
+We would like to predict the organic carbon content in the ground from spectroscopic measurements. As measuring the organic carbon content of the
+ground is more expensive than collecting spectroscopic measurements, we
+would like to be able to predict organic carbon content from spectroscopic
+measurements.
+In order to construct a prediction model, we have access to a database1
+with 177 soils (individuals) and both their organic carbon content (OC, response variable) and the spectra acquired in the visible and near-infrared
+range (400 nm-2500 nm), which gives 2101 explanatory variables. We will
+then predict the organic carbon content of three new soils.
+1Thank to Y. Fouad and C. Walter; A¨ichi H., Fouad Y., Walter C., Viscarra Rossel R.A.,
+Lili Chabaane Z. and Sanaa M. (2009). Regional predictions of soil organic carbon content
+from spectral reflectance measurements. Biosystems Engineering, 104, 442-446.
+148 R for Statistics
+7.3.3 Steps
+1. Read the data.
+2. Represent the data.
+3. Conduct a PLS regression after choosing the number of PLS components.
+4. Conduct a residual analysis.
+5. Predict a new value.
+7.3.4 Processing the Example
+1. Reading the data:
+  While being imported, an "X" is added by default to the names of variables
+that correspond to wavelength. Spectral data often needs to be preprocessed;
+this is usually done by standardising the data from a spectrum. To do so, we
+calculate the mean and the standard deviation for each spectrum (i.e. for each
+                                                                 row in the matrix, omitting the first column which corresponds to Y ). Then,
+for all the data in a row, we subtract its mean and divide by its standard
+deviation:
+  > Spectrum <- read.table("Spectrum_Breizh.txt", sep=";",
+                           header=TRUE, row.names=1)
+> row.mean <- apply(Spectrum[,-1], 1, mean)
+> Spectrum[,-1] <- sweep(Spectrum[,-1], 1, row.mean, FUN="-")
+> row.sd <- apply(Spectrum[,-1], 1, sd)
+> Spectrum[,-1] <- sweep(Spectrum[,-1], 1, row.sd, FUN="/")
+2. Representing the data:
+  The first step is to visualise the response variable Y , which corresponds to
+organic carbon content OC, through the representation of its histogram:
+  > hist(Spectrum[,"OC"], freq=F, xlab="Organic Carbon content")
+> lines(density(Spectrum[,"OC"]))
+> rug(Spectrum[,"OC"])
+The rug function is used to add vertical lines to the abscissa for the observations of variable Y . We can see in Figure 7.7 that one observation is extreme:
+  It is greater than 8, whereas all the others are less than 5. The following lines
+can be used to show that individual 79 has a very high value (8.9) The other
+values do not exceed 4.89.
+> which(Spectrum[,1]>8)
+[1] 79
+> Spectrum[79,1]
+Partial Least Squares (PLS) Regression 149
+Organic Carbon content
+Density
+0 2 4 6 8
+0.0 0.1 0.2 0.3 0.4
+Figure 7.7
+Representation of organic carbon content.
+[1] 8.9
+> max(Spectrum[-79,1])
+[1] 4.89
+This individual is unusual and can be removed when constructing the model:
+  > Spectrum <- Spectrum[-79,]
+The explanatory variables are spectra and can be represented by curves. Each
+spectrum can be represented by a different line (continuous, dashed, etc.)
+and/or colour, depending on the value of the OC variable. To construct this
+graph, we divide the OC variable into seven classes of almost equal size using
+the cut function; the points at which they are cut are determined by the
+quantiles (quantile). The factor obtained in this way is converted to a colour
+and line type code using the as.numeric function and the arguments col and
+lty. On the abscissa axis, we use the wavelengths:
+  > color <- as.numeric(cut(Spectrum[,1], quantile(Spectrum[,1],
+                                                   prob=seq(0,1,by=1/7)), include.lowest = TRUE))
+> matplot(x=400:2500, y=t(as.matrix(Spectrum[,-1])),type="l",
+          lty=color,col=color,xlab="Wavelength",ylab="Reflectance")
+We obtain the graph in Figure 7.8 in which each individual is a different curve.
+It would seem possible to distinguish groups of curves drawn with the same
+code, which means that similar curves admit similar values for the OC variable.
+3. Conducting a PLS regression after choosing the number of PLS components:
+  To conduct this regression, we use the preinstalled pls package that must be
+150 R for Statistics
+500 1000 1500 2000 2500
+???4 ???3 ???2 ???1 0 1 2
+Wavelength
+Reflectance
+Figure 7.8
+Representation of individuals (after a standardisation by row).
+loaded (see Section 1.6). By default, this package centres all the variables
+but does not reduce them. We reduce the explanatory variables using the
+argument scale. We must also fix a maximum number of PLS components
+(the higher this number, the longer it will take to run the program). To be
+safe, we fix this number at 100, which is already extremely high.
+> library(pls)
+> pls.model <- plsr(OC~., ncomp=100, data=Spectrum,
+                    scale=TRUE, validation="CV")
+With the pls package, the number of PLS components is, by default, determined by cross validation. We calculate the fitting error and the prediction
+error obtained with 1, 2, . . . , 100 PLS components and we then draw the two
+types of error using the plot.mvr function (Figure 7.9):
+  > msepcv.pls <- MSEP(pls.model, estimate=c("train","CV"))
+> plot(msepcv.pls,col=1,type="l",legendpos="topright",main="")
+The two error curves are typical: a continual decline for the fitting error depending on the number of components and a decrease followed by an increase
+for the prediction error. The optimal number of components for the prediction
+corresponds to the value for which the prediction error is minimal:
+  Partial Least Squares (PLS) Regression 151
+0 20 40 60 80 100
+0.0 0.2 0.4 0.6 0.8 1.0
+Number of components
+MSEP
+train
+CV
+Figure 7.9
+Evolution of both errors depending on the number of PLS components.
+> ncp <- which.min(msepcv.pls$val["CV",,])-1
+> ncp
+4 comps
+4
+We subtract 1 to obtain the number of PLS components directly (here there
+                                                               are four). As previously indicated, it was not necessary to fix the maximum
+number of PLS components at 100; we could have limited ourselves to 30. We
+fit the final model using the four PLS components:
+  > reg.pls <- plsr(OC~., ncomp=ncp, data=Spectrum, scale=TRUE)
+4. Conducting a residual analysis:
+  The residuals are obtained using the residuals function. Note that the residuals are provided for the one-component PLS model, and then the twocomponent model, . . . , until the model with the chosen number of components (here, four). We therefore only draw the residuals for the last model
+(Figure 7.10):
+  > res.pls <- residuals(reg.pls)
+> plot(res.pls[,,ncp],pch=15,cex=.5,ylab="Residuals",main="")
+> abline(h=c(-2,0,2), lty=c(2,1,2))
+No individuals are so extreme that they need to be removed from the analysis.
+It must be noted that if individual 79 had not been deleted previously, it would
+have had a very large residual and would have been deleted at this point.
+The variability of residuals is greater for the last individuals of the dataset
+(individuals coded by rmqs) and smaller for the first (individuals coded by
+                                                       Bt). The samples from the units analysed do not seem very homogeneous.
+152 R for Statistics
+0 50 100 150
+???1.5 ???0.5 0.5 1.0 1.5 2.0
+Index
+Residuals
+Figure 7.10
+Representation of residuals.
+5. Predicting a new value:
+  We have obtained a set of three complementary curves. For each one, we
+will compare the OC content predicted by the PLS regression to the observed
+values.
+First we read the data and apply the same preprocessing step as before:
+  > ReflecN <- read.table("Spectrum_new.txt", sep=";", header=TRUE,
+                          row.names=1)
+> row.meanN <- apply(ReflecN[,-1], 1, mean)
+> ReflecN[,-1] <- sweep(ReflecN[,-1], 1, row.meanN, FUN="-")
+> row.sdN <- apply(ReflecN[,-1], 1, sd)
+> ReflecN[,-1] <- sweep(ReflecN[,-1], 1, row.sdN, FUN="/")
+The predicted values are obtained using the predict function:
+  > pred <- predict(reg.pls, ncomp=ncp, newdata=ReflecN[,-1])
+> pred
+, , 4 comps
+OC
+3236 0.4065104
+rmqs_726 2.6930854
+rmqs_549 2.6035296
+These predicted values can be compared with the observed values:
+  > ReflecN[,1]
+[1] 1.08 1.60 1.85
+Partial Least Squares (PLS) Regression 153
+7.3.5 Rcmdr Corner
+It is not possible to conduct PLS regression with Rcmdr.
+7.3.6 Taking Things Further
+PLS regression is often associated with specific graphs which can be used to
+analyse the model more precisely and to describe the analysed sample.
+To better understand the role of each of the variables in the regression
+model, the coefficients can be drawn (Figure 7.11) for each of the wavelengths
+using the following commands:
+  > plot(reg.pls, plottype="coef", comps=1:ncp, main="",
+         legendpos="topleft", xlab="Wavelength", labels=400:2500)
+???0.002 0.000 0.002
+Wavelength
+Regression coefficient
+Comp 1
+Comp 2
+Comp 3
+Comp 4
+899 1399 1899 2399
+Figure 7.11
+Coefficients of the PLS regression for one to four-component models.
+The interpretation of this type of graph goes beyond the objectives set out
+in this work and we will simply underline the fact that there are coefficients
+for each reflectance of a given wavelength. They can therefore be interpreted
+in the same way as those of a multiple regression, the only difference being
+that here they are all on the same scale, as the initial variables (reflectances)
+are centred and reduced.
+It is possible to represent the cloud of individuals on the PLS components
+(called "PLS scores") in order to visualise the similarities between individuals,
+154 R for Statistics
+as in PCA (see Worked Example 10.1). For example, we draw components 1
+and 2 on an orthonormal index (asp=1) and colour all the samples from the
+rmqs group in grey using the following commands:
+  > color <- rep(1,nrow(Spectrum))
+> color[substr(rownames(Spectrum),0,4)=="rmqs"] <- "grey30"
+> plot(reg.pls, plottype="scores", comps=c(1,2),
+       col=color, asp=1)
+> abline(h=0,lty=2)
+> abline(v=0,lty=2)
+In Figure 7.12 we can see more clearly the division of the observed individuals
+into two populations.
+???
+???
+???
+???
+??? ??? ???
+??? ???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+??????
+???
+??? ???
+??????
+???
+??? ???
+??????
+???
+???
+???
+???
+?????? ???
+??? ??? ?????????
+???
+???
+?????????
+???
+??? ???
+???
+???
+???
+???
+???
+???
+??????
+???
+???
+???
+???
+??? ??? ??? ???
+???
+???
+???
+???
+???
+??? ???
+???
+??? ???
+???
+???
+???
+??? ???
+???
+???
+???
+???
+???
+??? ???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+??? ???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+??? ???
+???
+??????
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+???
+??? ???
+???
+???
+???
+???
+???
+???
+???
+???
+??? ???
+???
+???
+???
+???
+???
+???
+???
+???
+??? ??????
+???
+???
+???
+???
+???
+???200 ???100 0 100
+???50 0 50 100
+Comp 1 (52 %)
+Comp 2 (32 %)
+Figure 7.12
+Analysis of the model by component: components 1 and 2.
+Another classical analysis consists of representing the correlations between
+the loadings and the variables as in PCA (see graph of variables, Worked
+                                          Example 10.1). We visualise the variables which are the most closely linked to
+each of the components. The wavelengths can also be coloured using greyscale
+(from black for the first variables to light grey for the last, see Figure 7.13).
+> color <- grey(seq(0,.9,len=ncol(Spectrum)))
+> plot(pls.model,plottype="cor",comps=1:2,col=color,pch=20)
+Since the variables (here the wavelengths) are sorted, the evolution of their
+relationship with the PLS components can be represented using the argument
+plottype="loadings" (Figure 7.14):
+  > plot(pls.model,plottype="loadings",labels=400:2500,comps=1:ncp,
+         legendpos="topright",xlab="Wavelength",ylab="Loadings")
+> abline(h=0,lty=2)
+Partial Least Squares (PLS) Regression 155
+????????????
+??? ???
+??????
+??????
+??????
+??????
+???
+?????????
+??????
+???
+??????
+???????????????????????????
+??????
+????????????
+??????
+?????? ?????? ?????? ?????????????????? ???????????? ?????????????????????????????? ??? ??? ?????? ??? ??? ??? ??? ??? ??? ?????? ?????? ??? ?????? ???
+???????????? ???????????? ????????? ??????????????? ??????????????? ??????????????????????????????
+?????????????????? ??????
+????????????????????????????????????
+?????????
+??????
+??????
+??????
+???
+?????????
+??????
+??????
+?????????
+????????????
+????????????????????????
+???????????????
+???
+???
+???????????????
+??????
+?????????
+????????????????????????????????????????????????????????????????????????
+????????????
+??????????????????????????????????????????????????????????????????
+?????????
+??????????????????????????????????????????????????????
+?????????????????? ?????????
+??????
+???
+???
+??????
+??????
+??????
+??????
+????????????????????????????????????????????????
+???
+???
+???
+???
+???
+???
+??????????????????????????????????????????
+????????????????????????????????????????????????????????????????????????????????????????????????
+???
+??????
+????????????
+?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
+???
+??????
+??????
+??????
+????????????????????????
+??????
+?????????????????????
+??????
+?????????
+?????????
+?????????????????????
+?????????
+?????????
+??????
+???
+?????????
+??????
+????????????
+??????
+?????????
+??????
+??????
+????????? ???
+??????????????? ????????? ??????????????????????????????
+?????????
+??????????????????????????????????????????????????????
+?????????????????? ???
+?????????????????? ????????????????????? ????????????????????? ????????????
+????????? ?????????????????????
+??????
+???
+????????? ???????????????????????? ????????????????????? ?????????
+??????
+???????????????????????????
+??????????????????????????????????????????
+??????????????? ???????????? ????????????????????? ??????????????? ??????????????? ??????????????????
+????????? ????????????????????????????????? ???????????????
+????????????
+????????????
+????????????????????????????????????????????????
+???????????????
+???
+?????????????????????
+????????? ???
+?????????????????? ????????? ?????? ??????
+??????????????????
+??????????????? ????????????
+?????? ??? ?????????
+???
+???
+??????
+??? ??? ???
+???
+?????? ???
+???
+??? ??????
+???
+???
+???
+??? ???
+??? ???
+???
+?????? ???
+??? ??? ???
+???
+???
+??? ???
+???
+???
+???
+???
+???
+???
+???
+??????
+???
+??????
+???
+???
+??? ??? ??? ??????
+??? ?????? ???
+??????
+???
+???
+???
+???
+???
+???
+???1.5 ???1.0 ???0.5 0.0 0.5 1.0 1.5
+???1.0 ???0.5 0.0 0.5 1.0
+Comp 1 (52 %)
+Comp 2 (32 %)
+Figure 7.13
+Representation of the correlations with the loadings.
+A brief presentation of the PLS regression can be found in Hastie et al.
+(2009, p. 80-82). For more details and some case studies, see Varmuza and
+Filmozer (2009) or Vinzi et al. (2010).
+156 R for Statistics
+???0.06 ???0.04 ???0.02 0.00 0.02 0.04 0.06
+Wavelength
+Loadings
+899 1399 1899 2399
+Comp 1 (51.8 %)
+Comp 2 (32.1 %)
+Comp 3 (7.4 %)
+Comp 4 (2.5 %)
+Figure 7.14
+Representation of loadings.
+8
+Analysis of Variance and Covariance
+8.1 One-Way Analysis of Variance
+8.1.1 Objectives
+One-way analysis of variance (or ANOVA) is a statistical method used to
+model the relationship between an explanatory qualitative variable A with I
+categories (or levels) and a quantitative response variable Y . The main objective of the one-way analysis of variance is to compare the empirical means of Y
+for I levels of A. The one-way analysis of variance can therefore be considered
+an extension of the two-way comparison of means (see Worked Example 6.3).
+The one-way analysis of variance is therefore used to study the effect of a
+factor A on a quantitative variable Y . To do this, we construct the following
+model:
+  yij = µi + ??ij , i = 1, ..., I j = 1, ..., ni
+where ni
+is the sample size of category i, yij the observed value j for subpopulation i, µi the mean of sub-population i, and ??ij the residual of the
+model. An individual is therefore here defined by the pair (i, j). The analysis
+of variance thus consists of testing the equality of the µi
+'s.
+The model can also be written in the following classical format:
+  yij = µ + ??i + ??ij
+where µ is the overall mean and ??i
+is the specific effect of category i. In this
+latest formulation, there are I + 1 parameters to be estimated, of which only
+I are identifiable. A linear constraint must therefore be imposed. There are
+a number of different constraints and the most common are
+. One of the ??i
+is set at zero, which means that level i is considered the
+reference level.
+. The sum of all ??i
+'s is null, so the mean is taken as reference.
+The numerical estimations of the parameters, obtained from the least
+squares method, depend of course on the chosen constraint. Nevertheless,
+158 R for Statistics
+whatever the constraint, it is always possible to test the overall significance
+of the factor. This test, which does not depend on the constraint, is Fisher's
+exact test. In this test, the variability explained by factor A (the betweengroup variability) is compared with the residual variability (the within-group
+                                                                                                                                          variability). The hypotheses of this test are
+H0 : ???i ??i = 0 compared with H1 : ???i ??i 6= 0.
+These hypotheses require us to test the sub-model with the complete model:
+  yij = µ + ??ij , model under H0
+yij = µ + ??i + ??ij , model under H1
+Finally, a subsequent residual analysis is essential as it is used to check the
+individual fit of the model (outlier) and the overall fit.
+Remark
+In analyses of variance, the collected data is often rewritten in table format
+as in Table 8.1:
+  TABLE 8.1
+Some Ozone Data Organized into Cells
+Wind Ozone Values
+North 87 82 114 79 101 ...
+South 90 72 146 108 81 ...
+East 92 121 146 106 45 ...
+West 94 80 79 106 70 ...
+In this table, the individuals are indexed conventionally in the format yij
+where i is the row index and j the column index. This presentation of the
+data indeed validates the determination of the model. Nevertheless, prior to
+the analysis, the data must be transformed by constructing a classic table of
+individuals × variables by considering one variable for the factor and another
+for the quantitative variable. For example, this yields Table 8.2.
+8.1.2 Example
+We reexamine in more detail the ozone dataset of Worked Example 7.1 (p. 133).
+Here we analyse the relationship between the maximum daily ozone concentration (in µg/m3
+) and wind direction classed by sector (North, South, East,
+                                        West). The variable wind has I = 4 levels. We have at our disposal 112 pieces
+of data collected during the summer of 2001 in Rennes (France).
+8.1.3 Steps
+1. Read the data.
+One-Way Analysis of Variance 159
+TABLE 8.2
+Presentation of the Data Table
+Wind Ozone
+North 87
+North 82
+North 114
+South 90
+East 92
+West 94
+. . . . . .
+2. Represent the data.
+3. Analyse the significance of the factor.
+4. Conduct a residual analysis.
+5. Interpret the coefficients.
+8.1.4 Processing the Example
+1. Reading the data:
+  Import the dataset and summarise the variables of interest, here maxO3 and
+wind:
+  > ozone <- read.table("ozone.txt",header=T)
+> summary(ozone[,c("maxO3","wind")])
+maxO3 wind
+Min. : 42.00 East :10
+1st Qu.: 70.75 North:31
+Median : 81.50 South:21
+Mean : 90.30 West :50
+3rd Qu.:106.00
+Max. :166.00
+During the summer of 2001, the most common wind direction was West, and
+there were very few days with an East wind.
+2. Representing the data:
+  Prior to an analysis of variance, boxplots are usually constructed for each level
+of the qualitative variable. We therefore present the distribution of maxO3
+according to wind direction:
+  > plot(maxO3~wind,data=ozone,pch=15,cex=.5)
+160 R for Statistics
+Looking at the graph in Figure 8.1, it would seem that there is a wind effect.
+This impression can be validated by testing the significance of the factor.
+East North South West
+40 60 80 100 120 140 160
+wind
+maxO3
+Figure 8.1
+Boxplots of maxO3 according to the levels of the variable wind.
+3. Analysing the significance of the factor:
+  First of all, we use the lm (linear model) function (or the aov function) with
+a formula (see Appendix A.2, p. 266) in order to estimate the parameters of
+the model. The anova function returns the analysis of variance table:
+  > reg.aov1 <- lm(maxO3~wind,data=ozone)
+> anova(reg.aov1)
+Analysis of Variance Table
+Response: maxO3
+Df Sum Sq Mean Sq F value Pr(>F)
+wind 3 7586 2528.69 3.3881 0.02074 *
+  Residuals 108 80606 746.35
+---
+  Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+The first column indicates the factor's associated degrees of freedom, the second the sum of the squares, and the third the mean square (sum of the squares
+                                                                                                                                         divided by the degrees of freedom). The fourth column features the observed
+value of the test statistic. The fifth column (Pr(>F)) contains the p-value,
+that is to say, the probability that the test statistic under H0 will exceed the
+estimated value. The p-value (0.02) is less than 5%, thus H0 is rejected and
+we can accept the significance of wind at the 5% level. There is therefore at
+least one wind direction for which the maximum level of ozone is significantly
+different from the others.
+One-Way Analysis of Variance 161
+4. Conducting a residual analysis:
+  Residuals are available using the residuals function but they do not have the
+same variance (heteroscedastic). We therefore use studentised residuals. In
+order to plot the residuals according to the levels of the variable wind, we use
+the package lattice which is presented in detail in Section 3.2 (p. 73).
+> res.aov1 <- rstudent(reg.aov1)
+> library(lattice)
+> mypanel <- function(...) {
+  panel.xyplot(...)
+  panel.abline(h=c(-2,0,2),lty=c(3,2,3),...)
+}
+> trellis.par.set(list(fontsize=list(point=5,text=8)))
+> xyplot(res.aov1~I(1:112)|wind,data=ozone,pch=20,
+         ylim=c(-3,3),panel=mypanel, ylab="Residuals",xlab="")
+Residuals
+???3
+???2
+???1
+0
+1
+2
+3
+0 20 40 60 80 100
+L
+L
+L
+L
+L
+L
+LL
+LL
+East
+LL
+L
+L
+LL
+LL
+L
+L
+L L
+LL
+L
+L
+L
+L
+LL
+L
+LLLL
+LLL
+L
+L
+L
+North
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+LLLL
+L
+LL
+L
+L
+South
+0 20 40 60 80 100
+???3
+???2
+???1
+0
+1
+2
+3
+L
+LL
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+LL
+L
+LLL
+L
+L
+L
+LLL
+L
+LL
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+L
+LL
+LLL
+LL
+L
+West
+Figure 8.2
+Representation of the residuals according to the levels of the variable wind.
+162 R for Statistics
+In theory, 95% of the studentised residuals can be found in the interval [???2, 2].
+Here there are nine residuals outside of the interval, that is, 8%, which is
+acceptable. The distribution of the residuals seems to be comparable from
+one category to another.
+5. Interpreting the coefficients:
+  Now that an overall wind effect has been identified, we must examine how
+direction influences maximum ozone levels. In order to do so, the coefficients
+are analysed using the Student's t-test.
+As mentioned above, there are a number of different ways of writing the oneway analysis of variance model. By default, R uses the constraint ??1 = 0,
+which means taking as reference the first label of the variable alphabetically,
+which here is East.
+> summary(reg.aov1)
+Call:
+  lm(formula = maxO3 ~ wind, data = ozone)
+Residuals:
+  Min 1Q Median 3Q Max
+-60.600 -16.807 -7.365 11.478 81.300
+Coefficients:
+  Estimate Std. Error t value Pr(>|t|)
+(Intercept) 105.600 8.639 12.223 <2e-16 ***
+  windNorth -19.471 9.935 -1.960 0.0526 .
+windSouth -3.076 10.496 -0.293 0.7700
+windWest -20.900 9.464 -2.208 0.0293 *
+  ---
+  Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Residual standard error: 27.32 on 108 degrees of freedom
+Multiple R-Squared: 0.08602, Adjusted R-squared: 0.06063
+F-statistic: 3.388 on 3 and 108 DF, p-value: 0.02074
+Amongst other things, we obtain a Coefficient matrix which, for each parameter, (each line), has four columns: its estimation (Estimate column), its
+estimated standard deviation (Std. Error), the observed value of the test under H0 : ??i = 0 against H1 : ??i 6= 0. Finally, the associated p-value (Pr(>|t|))
+yields the probability of exceeding the estimated value.
+The estimate of µ, here denoted Intercept, is the mean East wind concentration in maxO3. The other values obtained correspond to the deviation from
+this mean for each wind cell.
+The last three lines of column Pr(>|t|) correspond to the test H0: ??i = 0.
+The following question can thus be answered: Is there a similarity between the
+One-Way Analysis of Variance 163
+wind considered and the wind from reference cell East? The South wind is not
+different, unlike the West wind. The p-value associated with the North wind
+is slightly more than 5% and thus we cannot confirm a significant difference
+from the East wind.
+If we want to select another specific control cell, for example the second label,
+which in this case is North, it can be indicated as follows:
+  > summary(lm(maxO3~C(wind,base=2),data=ozone))
+Call:
+  lm(formula = maxO3 ~ C(wind, base = 2), data = ozone)
+Residuals:
+  Min 1Q Median 3Q Max
+-60.600 -16.807 -7.365 11.478 81.300
+Coefficients:
+  Estimate Std. Error t value Pr(>|t|)
+(Intercept) 86.129 4.907 17.553 <2e-16 ***
+  C(wind, base = 2)1 19.471 9.935 1.960 0.0526 .
+C(wind, base = 2)3 16.395 7.721 2.123 0.0360 *
+  C(wind, base = 2)4 -1.429 6.245 -0.229 0.8194
+---
+  Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Residual standard error: 27.32 on 108 degrees of freedom
+Multiple R-Squared: 0.08602, Adjusted R-squared: 0.06063
+F-statistic: 3.388 on 3 and 108 DF, p-value: 0.02074
+Another possible constraint is P
+i ??i = 0, and is used as follows:
+  > summary(lm(maxO3~C(wind,sum),data=ozone))
+Call:
+  lm(formula = maxO3 ~ C(wind, sum), data = ozone)
+Residuals:
+  Min 1Q Median 3Q Max
+-60.600 -16.807 -7.365 11.478 81.300
+Coefficients:
+  Estimate Std. Error t value Pr(>|t|)
+(Intercept) 94.738 3.053 31.027 <2e-16 ***
+  C(wind, sum)1 10.862 6.829 1.590 0.1147
+C(wind, sum)2 -8.609 4.622 -1.863 0.0652 .
+C(wind, sum)3 7.786 5.205 1.496 0.1376
+---
+  164 R for Statistics
+Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Residual standard error: 27.32 on 108 degrees of freedom
+Multiple R-Squared: 0.08602, Adjusted R-squared: 0.06063
+F-statistic: 3.388 on 3 and 108 DF, p-value: 0.02074
+By default, R provides the values of ^µ, ^??1, ^??2 and ^??3. As P
+i ??i = 0, in order
+to find the coefficient associated with the West wind (last level), we must
+calculate
+??^4 = ?????^1 ??? ??^2 ??? ??^3 = ???10.038
+In all these analyses, it can be seen that the values of the estimates change
+depending on the constraint. On the other hand, the overall test given in the
+last row of the lists, which corresponds to the result of the analysis of variable
+table, remains the same.
+If within the same session, we want to carry out multiple analyses of variance
+with the same constraint, it is preferable to use
+> options(contrasts = c("contr.sum", "contr.sum"))
+the model is therefore written:
+  > summary(lm(maxO3~wind,data=ozone))
+8.1.5 Rcmdr Corner
+1. Reading the data from a file:
+  Data ??? Import data ??? from text file, clipboard, or URL ...
+Next specify that the field separator is the space and the decimal-point character is ".".
+To check that the dataset has been imported successfully:
+  Statistics ??? Summaries ??? Active data set
+2. Representing the data:
+  Graphs ??? Boxplot... Select the response variable maxO3 and click Plot by
+groups... then select the variable wind. It is possible to identify specific
+points using the mouse.
+3. Analysing the significance of the factor:
+  Statistics ??? Fit models ??? Linear model... then select the response
+variable (y) and the explanatory variable (x).
+The outputs here are estimations of parameters µ and ??i with constraint
+??1 = 0. To change this constraint to P
+i ??i = 0, use: Tools ??? Options... ???
+then in contrasts, replace contr.Treatment and contr.poly by contr.sum.
+Then click on Exit and Restart R Commander.
+One-Way Analysis of Variance 165
+To build the analysis of variance table:
+  Models ??? Hypothesis tests ??? ANOVA table...
+4. Conducting a residual analysis:
+  Many graphs are available for residual analysis, but not that of the lattice
+package. Nevertheless, we can obtain a few graphs using Models ??? Graphs
+5. Interpreting the coefficients:
+  See the item 3 "Analysing the significance of the factor".
+8.1.6 Taking Things Further
+It is possible to construct multiple comparisons of means tests. In this case
+we use the TukeyHSD function. This function can also be used for a oneway analysis of variance, but only works for two-or-more factor analyses of
+variance when the dataset is balanced.
+Theoretical presentations and exercises on analysis of variance are available
+in many books, such as Clarke and Cooke (2004), Moore et al. (2007), Sahai
+and Ageel (2000) or Faraway (2005).
+166 R for Statistics
+8.2 Multi-Way Analysis of Variance with Interaction
+8.2.1 Objective
+Multi-way analysis of variance (or ANOVA) is the generalisation of one-way
+ANOVA (see Worked Example 8.1). Using this method, it is possible to
+model the relationship between a quantitative variable and many qualitative
+variables. We examine a two-variable case, but the generalisation to multiple
+variables is immediate. Let us consider two qualitative explanatory variables,
+denoted A and B, and a quantitative response variable, denoted Y . We denote I as the number of levels of the variable A and J as that of variable B.
+By analysing variance, when we have multiple measurements for each confrontation of a level of A with a level of B, it is possible and often interesting
+to process the complete model using interaction. Interaction means examining the simultaneous effect of factors A and B on variable Y . The model is
+classically written as:
+  yijk = µ + ??i + ??j + ??ij + ??ijk (8.1)
+where µ is the overall mean, ??i
+is the effect due to the i-th level of the factor
+A, ??j is the effect due to the j-th level of the factor B, ??ij is the interaction
+effect when factor A is at level i and factor B is at level j, and ??ijk is the
+residual term.
+It is therefore interesting to test the hypotheses of an effect of factors A
+and B, and the interaction AB. In order to do so, we construct Fisher's exact
+test to compare the explained variability with the residual variability. We
+advise that you first test the significance of the interaction. Indeed, if the
+interaction is significant, the two factors are influential via their interaction
+and it is therefore not necessary to test their respective influence via the main
+effect. The hypotheses of the interaction test are
+(H0)AB : ???(i, j) ??ij = 0 compared with (H1)AB : ???(i, j) ??ij 6= 0.
+These hypotheses involve testing the sub-model against the complete model:
+  yijk = µ + ??i + ??j + ??ijk, model under (H0)AB (8.2)
+yijk = µ + ??i + ??j + ??ij + ??ijk, model under (H1)AB
+This test, which identifies the overall influence of the interaction of the factors,
+is simply a test between two nested models.
+We can then proceed in the same manner to test the effect of a single
+Multi-Way Analysis of Variance with Interaction 167
+factor. For example, in order to test the effect of factor A, we test the submodel without factor A against the model with factor A but without the
+interaction:
+  yijk = µ + ??j + ??ijk model under (H0)A
+yijk = µ + ??i + ??j + ??ijk model under (H1)A
+It may also be interesting to estimate the parameters of the model (µ, ??i
+                                                                     ,
+                                                                     ??j , ??ij ). Nevertheless, as for the one-way analysis of variance, there are more
+parameters in the model than there are calculable parameters: 1 + I + J + IJ
+parameters to be estimated, whereas only IJ are calculable. It is therefore
+necessary to impose 1 + I + J linearly independent constraints in order to
+make the system reversible.
+The classical constraints are
+1. Cell-analysis constraints:
+  µ = 0, ???i, ??i = 0, ???j, ??j = 0
+2. Cell reference constraints:
+  ??1 = 0, ??1 = 0, ???i, ??i1 = 0, ???j, ??1j = 0
+3. Sum constraints:
+  X
+i
+??i = 0,
+X
+j
+??j = 0, ???i, X
+j
+??ij = 0, ???j, X
+i
+??ij = 0
+8.2.2 Example
+We reexamine in more detail the ozone dataset of Worked Example 7.1 (p. 133).
+Here we will analyse the relationship between the maximum daily ozone concentration (in µg/m3
+) and wind direction classed into sectors: North, South,
+East, West and precipitation classed into two categories: Dry and Rainy. We
+have at our disposal 112 pieces of data collected during the summer of 2001
+in Rennes (France). Variable A admits I = 4 levels and variable B has J = 2
+levels.
+8.2.3 Steps
+1. Read the data.
+2. Represent the data.
+3. Choose the model.
+4. Interpret the coefficients.
+168 R for Statistics
+8.2.4 Processing the Example
+1. Reading the data:
+  Import the dataset and summarise the variables of interest, here maxO3, wind
+and rain:
+  > ozone <- read.table("ozone.txt",header=T)
+> summary(ozone[,c("maxO3","wind","rain")])
+maxO3 wind rain
+Min. : 42.00 East :10 Dry :69
+1st Qu.: 70.75 North:31 Rainy:43
+Median : 81.50 South:21
+Mean : 90.30 West :50
+3rd Qu.:106.00
+Max. :166.00
+2. Representing the data:
+  A boxplot is presented for each cell (confrontation of a level of wind with a
+                                        level of rain) which yields IJ = 8 boxplots (Figure 8.3):
+  > boxplot(maxO3~wind*rain,data=ozone)
+East.Dry North.Dry South.Dry West.Dry East.Rainy North.Rainy South.Rainy West.Rainy
+40 60 80 100 120 140 160
+Figure 8.3
+Boxplot of max03 according to the confrontation of the levels of the variables
+wind and rain.
+It must be noted that the ozone level is generally higher during dry weather
+than during rainy weather. Another way of graphically representing the interaction is as follows (see Figure 8.4):
+  > par(mfrow=c(1,2))
+> with(ozone,interaction.plot(wind,rain,maxO3))
+> with(ozone,interaction.plot(rain,wind,maxO3))
+Multi-Way Analysis of Variance with Interaction 169
+70 80 90 100 110
+wind
+mean of maxO3
+East North South West
+rain
+Dry
+Rainy
+70 80 90 100 110
+rain
+mean of maxO3
+Dry Rainy
+wind
+South
+West
+East
+North
+Figure 8.4
+Interaction graph depicting wind (left) and rain (right) on the x-axis.
+These graphs are interesting and can represent different interactions. We
+therefore advise that you construct both graphs even if only the more explicit
+of the two is analysed. The broken lines are almost parallel so the interaction
+is not very pronounced. We thus conduct the test to compare models (8.1)
+and (8.2).
+3. Choosing the model:
+  > mod.int <- lm(maxO3~wind*rain,data=ozone)
+> anova(mod.int)
+Analysis of Variance Table
+Response: maxO3
+Df Sum Sq Mean Sq F value Pr(>F)
+wind 3 7586 2528.7 4.1454 0.00809 **
+  rain 1 16159 16159.4 26.4910 1.257e-06 ***
+  wind:rain 3 1006 335.5 0.5500 0.64929
+Residuals 104 63440 610.0
+The first column indicates the factor's associated degrees of freedom, the second the sum of the squares, and the third the mean square (sum of the squares
+                                                                                                                                         divided by the degrees of freedom). The fourth column features the observed
+value of the test statistic. The fifth column (Pr(>F)) contains the p-value,
+that is to say, the probability that the test statistic under H0 will exceed the
+estimated value. The p-value (0.65) is more than 5%, thus we retain H0 and
+conclude that the interaction is not significant. We therefore consider that
+the model has no interaction (8.2).
+> mod.without.int <- lm(maxO3~wind+rain,data=ozone)
+> anova(mod.without.int)
+170 R for Statistics
+Analysis of Variance Table
+Response: maxO3
+Df Sum Sq Mean Sq F value Pr(>F)
+wind 3 7586 2528.7 4.1984 0.007514 **
+  rain 1 16159 16159.4 26.8295 1.052e-06 ***
+  Residuals 107 64446 602.3
+The two factors are significant and there is therefore both a wind effect and a
+rain effect on the maximum daily ozone level. We shall therefore retain this
+model and analyse the coefficients.
+4. Interpreting the coefficients:
+  The calculations depend on the constraints used. By default, the constraints
+used by R are ??1 = 0 and ??1 = 0. However, here there is no reason to fix a
+reference level. We therefore choose the constraints P
+i ??i = 0 and P
+j
+??j = 0,
+which yields
+> summary(lm(maxO3~C(wind,sum)+C(rain,sum),data=ozone))
+Call:
+  lm(formula = maxO3 ~ C(wind, sum) + C(rain, sum), data = ozone)
+Residuals:
+  Min 1Q Median 3Q Max
+-42.618 -15.664 -3.712 8.295 67.990
+Coefficients:
+  Estimate Std. Error t value Pr(>|t|)
+(Intercept) 90.135 2.883 31.260 < 2e-16 ***
+  C(wind, sum)1 7.786 6.164 1.263 0.2093
+C(wind, sum)2 -8.547 4.152 -2.059 0.0420 *
+  C(wind, sum)3 5.685 4.694 1.211 0.2285
+C(rain, sum)1 12.798 2.471 5.180 1.05e-06 ***
+  ---
+  Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+Residual standard error: 24.54 on 107 degrees of freedom
+Multiple R-Squared: 0.2692, Adjusted R-squared: 0.2419
+F-statistic: 9.856 on 4 and 107 DF, p-value: 7.931e-07
+Amongst other things, we obtain a Coefficient matrix with four columns for
+each parameter (row). These include its estimation (column Estimate), its
+estimated standard deviation (Std. Error), the observed value of the given
+test statistic, and finally the p-value (Pr(>|t|)) which yields under H0 the
+probability of exceeding the estimated value.
+Multi-Way Analysis of Variance with Interaction 171
+The estimator of µ, here denoted Intercept, corresponds to the mean effect. The West wind effect is not included in the list. As the constraint is
+PI
+i ??i = 0, we estimate ??4 for ???(7.786 ??? 8.547 + 5.685) = ???4.924. The effect of the category Rainy is ???12.798. It is reassuring that the coefficient
+which corresponds to dry weather exceeds that associated with wet weather,
+as radiation is one of the catalysts of ozone production.
+Like in one-way analysis of variance (see Worked Example 8.1), estimates
+depend on the constraints used. However, the overall test, which corresponds
+to the results of the analysis of variable table, remains the same.
+If, within the same session, we want to carry out multiple analyses of variance
+with the same constraint, it is preferable to use
+> options(contrasts = c("contr.sum", "contr.sum"))
+The models are therefore written as:
+  > summary(lm(maxO3~wind+rain+wind:rain,data=ozone))
+> summary(lm(maxO3~wind+rain,data=ozone)) #without interaction
+8.2.5 Rcmdr Corner
+1. Reading the data from a file:
+  Data ??? Import data ??? from text file, clipboard, or URL ...
+Next specify that the field separator is the space and the decimal-point character is ".".
+To check that the dataset has been imported successfully:
+  Statistics ??? Summaries ??? Active data set
+2. Representing the data:
+  It is not possible to represent the interaction.
+3. Choosing the model:
+  Multiple models can be chosen by using Statistics ??? Fit models ??? Linear
+model... and then writing the model. If multiple models have been constructed, it is possible to test one against another by using Model ??? Hypothesis
+tests ??? Compare two models...
+By default, the outputs are estimates of parameters µ, ??i
+, ??j and ??ij with
+"reference cell" constraints. To change this constraint to a sum constraint, use
+Tools ??? Options... ??? then in contrasts, replace contr.Treatment and
+contr.poly by contr.sum. Then click on Exit and Restart R Commander.
+To draw up the analysis of variance table:
+  Models ??? Hypothesis tests ??? ANOVA table
+4. Interpreting the coefficients:
+  See previous item.
+172 R for Statistics
+8.2.6 Taking Things Further
+During the construction of the model, we assume that the residuals follow
+a normal distribution and are homoscedastic. It can also be interesting to
+test the equality of variance of residuals for the different combinations of the
+interaction. In order to do so, we can construct a Bartlett test using the
+bartlett.test function. If we reject the equality of variance, we can construct
+a Friedman test, which is based on ranks, using the friedman.test function.
+Theoretical presentations and exercises on analysis of variance are available
+in many books, such as Clarke and Cooke (2004), Faraway (2005), Moore et al.
+(2007) or Sahai and Ageel (2000).
+Analysis of Covariance 173
+8.3 Analysis of Covariance
+8.3.1 Objective
+The analysis of covariance aims to model the relationship between a quantitative response variable Y and quantitative and qualitative explanatory variables. This worked example is dedicated to examining the simplest case: that
+is, a case in which there are only two explanatory variables, one of which is
+quantitative and the other qualitative. The quantitative variable is denoted
+X and the qualitative variable Z, which is considered to have I categories. As
+the relationship between the response variable Y and the explanatory variable X can depend on the categories of the qualitative variable Z, the natural
+procedure involves conducting I different regressions, one for each level i of
+Z. In terms of modelling, this yields:
+  y1,j = ??1 + ??1x1,j + ??1,j j = 1, . . . , n1 level 1 of Z
+y2,j = ??2 + ??2x2,j + ??2,j j = 1, . . . , n2 level 2 of Z
+.
+.
+.
+.
+.
+.
+yI,j = ??I + ??IxI,j + ??I,j j = 1, . . . , nI final level of Z
+Put more simply
+yi,j = ??i + ??ixi,j + ??i,j i = 1, . . . , I, j = 1, . . . , ni (8.3)
+In this model the 2I parameters (??i and ??i) are calculated by the least
+squares method by conducting a simple regression for each level of Z. In terms
+of error, one typically considers that all the ??i,j have the same variance ??
+2
+,
+an assumption made both in regression and analysis of variance.
+This model can also be written by identifying an overall mean ?? and a
+mean slope ?? (as in analysis of variance):
+  yi,j = ?? + ??i + (?? + ??i)xi,j + ??i,j i = 1, . . . , I, j = 1, . . . , ni
+. (8.4)
+Constraints must thus be added in order to obtain an identifiable model. As
+in analysis of variance, we classically impose P
+i ??i = 0 and P
+i
+??i = 0, or
+indeed one ??i = 0 and one ??i = 0.
+To know whether Z has an effect on Y , we need to test the equality of the
+intercepts and that of the slopes between different models of linear regression.
+A number of different cases could be considered (see Figure 8.5).
+174 R for Statistics
+Figure 8.5
+Illustration of the models (8.4), (8.5) and (8.6).
+The more general model (8.4), which we refer to as the complete model,
+is illustrated on the left in Figure 8.5. In this case, the slopes and intercepts
+are assumed to be different for each level of Z.
+A first simplification of this model is to suppose that variable X intervenes
+in the same manner, whatever the level of variable Z. It amounts to assuming
+that the slopes are identical, but that the intercepts are not. This is the model
+illustrated in the centre of Figure 8.5, which is written as
+yi,j = ??i + ??xi,j + ??i,j i = 1, . . . , I, j = 1, . . . , ni (8.5)
+It must be noted that here there is no interaction between X and Z as the
+slopes are identical.
+Another simplification of the complete model (8.4) is to assume that in
+the categories of Z, the intercepts are the same but the slopes are not (see
+                                                                         right-hand graph in Figure 8.5). The model is therefore written as
+yi,j = ?? + ??ixi,j + ??i,j i = 1, . . . , I, j = 1, . . . , ni (8.6)
+The choice of model (8.4), (8.5) or (8.6) depends on the problem addressed.
+We advise starting with the most general model (8.4) and then, if the slopes
+are the same, we turn to model (8.5); if the intercepts are the same, we turn
+to model (8.6). As the models are nested, it is possible to test one model
+against another.
+Once the model is chosen, the residuals must be analysed. This analysis
+is essential as it is used to check the individual fit of the model (outliers) and
+the global fit, for example by checking that there is no structure.
+8.3.2 Example
+We are interested in the balance of flavours between different ciders and, more
+precisely, the relationship between the sweet and bitter flavours according
+to the type of cider (dry, semi-dry or sweet). The flavour evaluations were
+provided by a tasting panel (mean marks, from 1 to 10, by 24 panel members)
+for each of 50 dry ciders, 30 semi-dry ciders and 10 sweet ciders.
+Analysis of Covariance 175
+8.3.3 Steps
+1. Read the data.
+2. Represent the data.
+3. Choose the model.
+4. Conduct a residual analysis.
+8.3.4 Processing the Example
+1. Reading the data:
+  Import the data, check the number of samples and the number of variables in
+the dataset, and summarise the variables of interest, here Type, Sweetness
+and Bitterness:
+  > cider <- read.table("cider.csv",header=TRUE,sep=",")
+> dim(cider)
+[1] 90 5
+> summary(cider[,c(1,2,4)])
+Type Sweetness Bitterness
+Dry :50 Min. :3.444 Min. :2.143
+Semi-dry:30 1st Qu.:4.580 1st Qu.:3.286
+Sweet :10 Median :5.250 Median :3.964
+Mean :5.169 Mean :4.274
+3rd Qu.:5.670 3rd Qu.:5.268
+Max. :7.036 Max. :7.857
+2. Representing the data:
+  Prior to an analysis of covariance, it may be useful to explore the data by representing, for each level of the qualitative variable, the scatterplot confronting
+the response variable Sweetness and the quantitative explanatory variable
+Bitterness. It is possible to represent these scatterplots on the same graph
+using different symbols (Figure 8.6). To do so, we use the argument pch and
+convert the variable Type as numeric to define pch values from 1 to the number of levels according to the values of Type. The argument col can be used
+exactly in the same way if we want to use a specific colour for each cider.
+Then, we add a legend on the top right of the graph to specify the symbol
+used for each type of cider (Figure 8.6).
+> plot(Sweetness~Bitterness,pch=as.numeric(Type),data=cider)
+> legend("topright",levels(cider$Type),pch=1:nlevels(cider$Type))
+176 R for Statistics
+2 3 4 5 6 7 8
+3.5 4.0 4.5 5.0 5.5 6.0 6.5 7.0
+Bitterness
+Sweetness
+Dry
+Semi???dry
+Sweet
+Figure 8.6
+Representation of the scatterplot.
+It is also possible to represent the data using the xyplot function from the
+lattice package (see Figure 8.7):
+  > library(lattice)
+> xyplot(Sweetness~Bitterness|Type,data=cider)
+To have a more precise idea of the effect of the qualitative variable, we could
+represent the regression line for each category but it is difficult to get an
+idea of the most appropriate model simply by looking at these graphs. It is
+therefore preferable to analyse the models.
+3. Choosing the model:
+  The complete model defined by (8.4) is adjusted using the lm (linear model)
+function:
+  > global <- lm(Sweetness~-1+Type+Type:Bitterness, data=cider)
+We remove the intercept by writing ???1 but it must be specified that it is
+necessary to calculate an intercept for each type of cider by adding the factor
+Type. We must then specify that we require a different slope for each type of
+cider by writing the interaction of the variables Sweetness and Type.
+The one-slope model (8.5) can be written as
+> slopeU <- lm(Sweetness~-1 + Type + Bitterness, data = cider)
+and a model with only one intercept (8.6)
+> interceptU <- lm(Sweetness ~ Type:Bitterness, data = cider)
