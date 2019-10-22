@@ -4,21 +4,21 @@ Hypothesis Test
 The aim of this worked example is to construct a confidence interval for the
 mean of a quantitative variable from a sample. The method presented here
 can be extended to construct a confidence interval of a proportion (see Section 6.1.6, "Taking Things Further").
-The confidence interval for the population mean µ for a variable X is
+The confidence interval for the population mean Âµ for a variable X is
 expressed as:
   
-x¯ ???
+xÂ¯ ???
 ??^
 ???
 n
-× t1?????/2(n ??? 1) , x¯ +
+Ã— t1?????/2(n ??? 1) , xÂ¯ +
   ??^
 ???
 n
-× t1?????/2(n ??? 1)
-where ¯x is the empirical mean of the sample, ^?? the estimated standard deviation, n the sample size, and t1?????/2(n???1) the quantile 1?????/2 of the Student's
+Ã— t1?????/2(n ??? 1)
+where Â¯x is the empirical mean of the sample, ^?? the estimated standard deviation, n the sample size, and t1?????/2(n???1) the quantile 1?????/2 of the Student's
 t-distribution with (n ??? 1) degrees of freedom. It is important to remember
-that the procedure assumes that the estimator of the mean X¯ follows a normal
+that the procedure assumes that the estimator of the mean XÂ¯ follows a normal
 distribution. This is true if X follows a normal distribution or if the sample
 size is large enough (in practice, n > 30, thanks to the central limit theorem).
 6.1.2 Example
@@ -51,7 +51,7 @@ Max. :2400.0
 Check that the sample size is equal to n = 240. Then check that the variable Weight is indeed quantitative and obtain the minimum, the mean, the
 quartiles and the maximum for this variable.
 2. Calculating the descriptive statistics:
-  Next, estimate the mean (¯x) and the standard deviation (^??) within the sample:
+  Next, estimate the mean (Â¯x) and the standard deviation (^??) within the sample:
   > mean(octopus)
 Weight
 639.625
@@ -88,16 +88,16 @@ therefore unnecessary.
 [1] 582.9252 696.3248
 attr(,"conf.level")
 [1] 0.95
-Strictly speaking, the unknown mean µ of X, estimated to be 639.625 g, either
+Strictly speaking, the unknown mean Âµ of X, estimated to be 639.625 g, either
 does or does not belong to the interval [583, 696]. It is therefore within the
 interval with a probability of 0 or 1. However, the procedure as a whole
 112 R for Statistics
 guarantees that, if it is repeated infinitely with new samples of the same size
 n = 240, then 95% of the confidence intervals will contain the true unknown
-value of µ. In practice, it is faster to say that the true mean µ is between
+value of Âµ. In practice, it is faster to say that the true mean Âµ is between
 583 g and 696 g at a confidence level of 95%.
 It is also possible to calculate the confidence interval "by hand" by calculating
-x¯±t239(0.975)×??/^
+xÂ¯Â±t239(0.975)Ã—??/^
 ???
 n, where t239(0.975) is the quantile 97.5% of the Student's
 t-distribution with 239 degrees of freedom:
@@ -135,7 +135,7 @@ Chi-Square Test of Independence 113
 The objective of this worked example is to test the independence between
 two qualitative variables. First, we consider that the data is in a contingency
 table (two-way table). In Section 6.2.6, "Taking Things Further", we examine
-a case in which the data is in a table of individuals × variables.
+a case in which the data is in a table of individuals Ã— variables.
 To test the independence of two qualitative variables, we test the null
 hypothesis H0: "the two variables are independent" against the alternative
 hypothesis H1: "the two variables are not independent". In order to do so,
@@ -166,7 +166,7 @@ i nij
 n
 . Under H0, ??
 2
-follows a chi-square distribution with (I ??? 1) × (J ??? 1) degrees of freedom.
+follows a chi-square distribution with (I ??? 1) Ã— (J ??? 1) degrees of freedom.
 If there is no independence, it is interesting to calculate the contribution of
 pairs of categories to the chi-square statistic in order to observe associations
 between categories.
@@ -305,14 +305,14 @@ way, we can obtain the row or column percentages, the contributions and
 the test statistic:
   Statistics ??? Contingency tables
 ??? Enter and analyze two-way table...
-. To use the existing data in the form of a table of individuals × variables (see Section 6.2.6, "Taking Things Further"). We then use the
+. To use the existing data in the form of a table of individuals Ã— variables (see Section 6.2.6, "Taking Things Further"). We then use the
 menu Statistics ??? Contingency tables ??? Two-way table to select
 two variables and obtain a contingency table. This procedure yields the
 result of the test and the contributions to the ??
 2
 statistic.
 6.2.6 Taking Things Further
-The data may arrive from a table of individuals × variables: with the children
+The data may arrive from a table of individuals Ã— variables: with the children
 in rows (i.e. the statistical individual), and the qualitative variables in the
 columns, which here are colour and sex. The same procedure can therefore
 be carried out as before using the function xtabs (see Section 2.6, p. 46).
@@ -327,9 +327,9 @@ in many books, such as Clarke and Cooke (2004).
 118 R for Statistics
 6.3 Comparison of Two Means
 6.3.1 Objective
-The aim of this worked example is to test the equality of the means of two subpopulations (µ1 and µ2) for a quantitative variable X. In formal terms, we test
-the hypothesis H0 : µ1 = µ2 against the alternative hypothesis H1 : µ1 6= µ2
-(or H1 : µ1 > µ2 or H1 : µ1 < µ2).
+The aim of this worked example is to test the equality of the means of two subpopulations (Âµ1 and Âµ2) for a quantitative variable X. In formal terms, we test
+the hypothesis H0 : Âµ1 = Âµ2 against the alternative hypothesis H1 : Âµ1 6= Âµ2
+(or H1 : Âµ1 > Âµ2 or H1 : Âµ1 < Âµ2).
 In order to carry out this test, we have to know if the variances of the variable X (??
                                                                                      2
                                                                                      1 and ??
@@ -357,8 +357,8 @@ and under the null hypothesis this
 quantity follows a Fisher's distribution with, respectively, n1???1 and n2???1 degrees of freedom (where n1 and n2 are the sample size in each sub-population).
 . If we accept the equality of the two variances, we test the equality of
 the two means using the following t-test. The variance of the difference
-(X¯
-  1???X¯
+(XÂ¯
+  1???XÂ¯
   2) is equal to ^??
 2
 D =
@@ -377,13 +377,13 @@ n2
 
 . The test statistic
 is T =
-  X¯1???X¯2
+  XÂ¯1???XÂ¯2
 ??^D
-and, under the null hypothesis (H0 : µ1 = µ2), this quantity
+and, under the null hypothesis (H0 : Âµ1 = Âµ2), this quantity
 follows a Student's t distribution with n1 + n2 ??? 2 degrees of freedom.
 . If we reject the equality of the two variances, we test the equality of the
-two means using Welch's t-test. The variance of the difference (X¯
-                                                                1???X¯
+two means using Welch's t-test. The variance of the difference (XÂ¯
+                                                                1???XÂ¯
                                                                 2) is
 equal to ^??
 2
@@ -398,10 +398,10 @@ n1
 2
 n2
 . The test statistic is T =
-  X¯1???X¯2
+  XÂ¯1???XÂ¯2
 ??^D
 and, under the null
-hypothesis (H0 : µ1 = µ2), this quantity follows a Student's t distribution
+hypothesis (H0 : Âµ1 = Âµ2), this quantity follows a Student's t distribution
 with ?? degrees of freedom, where 1
 ?? =
   1
@@ -446,7 +446,7 @@ Weight Sex
 5400 Male
 Comparison of Two Means 119
 We would like to test the equality of the unknown theoretical mean female
-(µ1) and male (µ2) octopus weights, with a type-one error rate set at 5%.
+(Âµ1) and male (Âµ2) octopus weights, with a type-one error rate set at 5%.
 6.3.3 Steps
 1. Read the data.
 2. Compare the two sub-populations graphically.
@@ -759,8 +759,8 @@ Power of a Test 129
 6.6.1 Objective
 The aim of this worked example is to calculate the power of the test of equality
 of means of two sub-populations. The test of equality of means is used to
-choose between the hypothesis H0 : µ1 = µ2 and the alternative hypothesis
-H1 : µ1 6= µ2 (or H1 : µ1 > µ2 or H1 : µ1 < µ2) (see Worked Example 6.3).
+choose between the hypothesis H0 : Âµ1 = Âµ2 and the alternative hypothesis
+H1 : Âµ1 6= Âµ2 (or H1 : Âµ1 > Âµ2 or H1 : Âµ1 < Âµ2) (see Worked Example 6.3).
 The power of the test is the probability of rejecting the hypothesis H0 when
 H1 is true. Power is equal to 1 ??? ??, ?? being the type-two error (that is to
                                                                  say, the risk of mistakenly accepting H0). The power therefore corresponds
@@ -898,7 +898,7 @@ Associations set up to monitor air quality are active all over France to
 measure the concentration of these pollutants. They also keep a record of
 meteorological conditions such as temperature, cloud cover, wind, etc.
 Here we analyse the relationship between the maximum daily ozone level
-(in µg/m3
+(in Âµg/m3
 ) and temperature. We have at our disposal 112 observations collected during the summer of 2001 in Rennes (France).
 7.1.3 Steps
 1. Read the data.
@@ -1083,11 +1083,11 @@ such as Clarke and Cooke (2004), Moore et al. (2007) or Faraway (2005).
 140 R for Statistics
 7.2 Multiple Linear Regression
 7.2.1 Objective
-Multiple linear regression consists of explaining and/or predicting a quantitative variable Y by p quantitative variables X1, · · · , Xp. The multiple regression model is a generalisation of the simple regression model (see Worked
+Multiple linear regression consists of explaining and/or predicting a quantitative variable Y by p quantitative variables X1, Â· Â· Â· , Xp. The multiple regression model is a generalisation of the simple regression model (see Worked
                                                                                                                                                                                                                             Example 7.1). We therefore suppose that the n data collected conform to the
 following model:
-  yi = ??0 + ??1xi1 + ??2xi2 + · · · + ??pxip + ??i
-, i = 1, · · · , n, (7.1)
+  yi = ??0 + ??1xi1 + ??2xi2 + Â· Â· Â· + ??pxip + ??i
+, i = 1, Â· Â· Â· , n, (7.1)
 where xij are known numbers measuring the explanatory variables which are
 organised within a matrix X known as the experimental design matrix. The
 parameters ??j of the model are unknown and need to be estimated. The
@@ -1144,7 +1144,7 @@ yn
 From these observations, we estimate the unknown parameters of the model
 by minimising the least-square criterion:
   ??^ = argmin
-??0,··· ,??p
+??0,Â·Â·Â· ,??p
 Xn
 i=1
 ???
@@ -1170,7 +1170,7 @@ Once the parameters have been estimated, we can calculate the fitted
 values:
   y^i = ??^
 0 + ??^
-1xi1 + · · · + ??^
+1xi1 + Â· Â· Â· + ??^
 pxip
 or predict new values. The difference between the observed value and the
 fitted value is, by definition, the residual:
@@ -1182,7 +1182,7 @@ Multiple Linear Regression 141
 7.2.2 Example
 We reexamine the ozone dataset introduced in Worked Example 7.1 (p. 133).
 Here we analyse the relationship between the maximum daily ozone level (in
-                                                                        µg/m3
+                                                                        Âµg/m3
 ) and temperature at different times of day, cloud cover at different
 times of day, the wind projection on the East-West axis at different times
 of day and the maximum ozone concentration for the day before the day in
@@ -1425,7 +1425,7 @@ In order to construct a prediction model, we have access to a database1
 with 177 soils (individuals) and both their organic carbon content (OC, response variable) and the spectra acquired in the visible and near-infrared
 range (400 nm-2500 nm), which gives 2101 explanatory variables. We will
 then predict the organic carbon content of three new soils.
-1Thank to Y. Fouad and C. Walter; A¨ichi H., Fouad Y., Walter C., Viscarra Rossel R.A.,
+1Thank to Y. Fouad and C. Walter; AÂ¨ichi H., Fouad Y., Walter C., Viscarra Rossel R.A.,
 Lili Chabaane Z. and Sanaa M. (2009). Regional predictions of soil organic carbon content
 from spectral reflectance measurements. Biosystems Engineering, 104, 442-446.
 148 R for Statistics
@@ -1956,15 +1956,15 @@ an extension of the two-way comparison of means (see Worked Example 6.3).
 The one-way analysis of variance is therefore used to study the effect of a
 factor A on a quantitative variable Y . To do this, we construct the following
 model:
-  yij = µi + ??ij , i = 1, ..., I j = 1, ..., ni
+  yij = Âµi + ??ij , i = 1, ..., I j = 1, ..., ni
 where ni
-is the sample size of category i, yij the observed value j for subpopulation i, µi the mean of sub-population i, and ??ij the residual of the
+is the sample size of category i, yij the observed value j for subpopulation i, Âµi the mean of sub-population i, and ??ij the residual of the
 model. An individual is therefore here defined by the pair (i, j). The analysis
-of variance thus consists of testing the equality of the µi
+of variance thus consists of testing the equality of the Âµi
 's.
 The model can also be written in the following classical format:
-  yij = µ + ??i + ??ij
-where µ is the overall mean and ??i
+  yij = Âµ + ??i + ??ij
+where Âµ is the overall mean and ??i
 is the specific effect of category i. In this
 latest formulation, there are I + 1 parameters to be estimated, of which only
 I are identifiable. A linear constraint must therefore be imposed. There are
@@ -1983,8 +1983,8 @@ exact test. In this test, the variability explained by factor A (the betweengrou
                                                                                                                                           variability). The hypotheses of this test are
 H0 : ???i ??i = 0 compared with H1 : ???i ??i 6= 0.
 These hypotheses require us to test the sub-model with the complete model:
-  yij = µ + ??ij , model under H0
-yij = µ + ??i + ??ij , model under H1
+  yij = Âµ + ??ij , model under H0
+yij = Âµ + ??i + ??ij , model under H1
 Finally, a subsequent residual analysis is essential as it is used to check the
 individual fit of the model (outlier) and the overall fit.
 Remark
@@ -2001,11 +2001,11 @@ In this table, the individuals are indexed conventionally in the format yij
 where i is the row index and j the column index. This presentation of the
 data indeed validates the determination of the model. Nevertheless, prior to
 the analysis, the data must be transformed by constructing a classic table of
-individuals × variables by considering one variable for the factor and another
+individuals Ã— variables by considering one variable for the factor and another
 for the quantitative variable. For example, this yields Table 8.2.
 8.1.2 Example
 We reexamine in more detail the ozone dataset of Worked Example 7.1 (p. 133).
-Here we analyse the relationship between the maximum daily ozone concentration (in µg/m3
+Here we analyse the relationship between the maximum daily ozone concentration (in Âµg/m3
 ) and wind direction classed by sector (North, South, East,
                                         West). The variable wind has I = 4 levels. We have at our disposal 112 pieces
 of data collected during the summer of 2001 in Rennes (France).
@@ -2230,7 +2230,7 @@ F-statistic: 3.388 on 3 and 108 DF, p-value: 0.02074
 Amongst other things, we obtain a Coefficient matrix which, for each parameter, (each line), has four columns: its estimation (Estimate column), its
 estimated standard deviation (Std. Error), the observed value of the test under H0 : ??i = 0 against H1 : ??i 6= 0. Finally, the associated p-value (Pr(>|t|))
 yields the probability of exceeding the estimated value.
-The estimate of µ, here denoted Intercept, is the mean East wind concentration in maxO3. The other values obtained correspond to the deviation from
+The estimate of Âµ, here denoted Intercept, is the mean East wind concentration in maxO3. The other values obtained correspond to the deviation from
 this mean for each wind cell.
 The last three lines of column Pr(>|t|) correspond to the test H0: ??i = 0.
 The following question can thus be answered: Is there a similarity between the
@@ -2278,7 +2278,7 @@ Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 Residual standard error: 27.32 on 108 degrees of freedom
 Multiple R-Squared: 0.08602, Adjusted R-squared: 0.06063
 F-statistic: 3.388 on 3 and 108 DF, p-value: 0.02074
-By default, R provides the values of ^µ, ^??1, ^??2 and ^??3. As P
+By default, R provides the values of ^Âµ, ^??1, ^??2 and ^??3. As P
 i ??i = 0, in order
 to find the coefficient associated with the West wind (last level), we must
 calculate
@@ -2305,7 +2305,7 @@ points using the mouse.
 3. Analysing the significance of the factor:
   Statistics ??? Fit models ??? Linear model... then select the response
 variable (y) and the explanatory variable (x).
-The outputs here are estimations of parameters µ and ??i with constraint
+The outputs here are estimations of parameters Âµ and ??i with constraint
 ??1 = 0. To change this constraint to P
 i ??i = 0, use: Tools ??? Options... ???
 then in contrasts, replace contr.Treatment and contr.poly by contr.sum.
@@ -2337,8 +2337,8 @@ denoted A and B, and a quantitative response variable, denoted Y . We denote I a
 By analysing variance, when we have multiple measurements for each confrontation of a level of A with a level of B, it is possible and often interesting
 to process the complete model using interaction. Interaction means examining the simultaneous effect of factors A and B on variable Y . The model is
 classically written as:
-  yijk = µ + ??i + ??j + ??ij + ??ijk (8.1)
-where µ is the overall mean, ??i
+  yijk = Âµ + ??i + ??j + ??ij + ??ijk (8.1)
+where Âµ is the overall mean, ??i
 is the effect due to the i-th level of the factor
 A, ??j is the effect due to the j-th level of the factor B, ??ij is the interaction
 effect when factor A is at level i and factor B is at level j, and ??ijk is the
@@ -2352,17 +2352,17 @@ and it is therefore not necessary to test their respective influence via the mai
 effect. The hypotheses of the interaction test are
 (H0)AB : ???(i, j) ??ij = 0 compared with (H1)AB : ???(i, j) ??ij 6= 0.
 These hypotheses involve testing the sub-model against the complete model:
-  yijk = µ + ??i + ??j + ??ijk, model under (H0)AB (8.2)
-yijk = µ + ??i + ??j + ??ij + ??ijk, model under (H1)AB
+  yijk = Âµ + ??i + ??j + ??ijk, model under (H0)AB (8.2)
+yijk = Âµ + ??i + ??j + ??ij + ??ijk, model under (H1)AB
 This test, which identifies the overall influence of the interaction of the factors,
 is simply a test between two nested models.
 We can then proceed in the same manner to test the effect of a single
 Multi-Way Analysis of Variance with Interaction 167
 factor. For example, in order to test the effect of factor A, we test the submodel without factor A against the model with factor A but without the
 interaction:
-  yijk = µ + ??j + ??ijk model under (H0)A
-yijk = µ + ??i + ??j + ??ijk model under (H1)A
-It may also be interesting to estimate the parameters of the model (µ, ??i
+  yijk = Âµ + ??j + ??ijk model under (H0)A
+yijk = Âµ + ??i + ??j + ??ijk model under (H1)A
+It may also be interesting to estimate the parameters of the model (Âµ, ??i
                                                                      ,
                                                                      ??j , ??ij ). Nevertheless, as for the one-way analysis of variance, there are more
 parameters in the model than there are calculable parameters: 1 + I + J + IJ
@@ -2371,7 +2371,7 @@ necessary to impose 1 + I + J linearly independent constraints in order to
 make the system reversible.
 The classical constraints are
 1. Cell-analysis constraints:
-  µ = 0, ???i, ??i = 0, ???j, ??j = 0
+  Âµ = 0, ???i, ??i = 0, ???j, ??j = 0
 2. Cell reference constraints:
   ??1 = 0, ??1 = 0, ???i, ??i1 = 0, ???j, ??1j = 0
 3. Sum constraints:
@@ -2387,7 +2387,7 @@ i
 ??ij = 0
 8.2.2 Example
 We reexamine in more detail the ozone dataset of Worked Example 7.1 (p. 133).
-Here we will analyse the relationship between the maximum daily ozone concentration (in µg/m3
+Here we will analyse the relationship between the maximum daily ozone concentration (in Âµg/m3
 ) and wind direction classed into sectors: North, South,
 East, West and precipitation classed into two categories: Dry and Rainy. We
 have at our disposal 112 pieces of data collected during the summer of 2001
@@ -2511,7 +2511,7 @@ estimated standard deviation (Std. Error), the observed value of the given
 test statistic, and finally the p-value (Pr(>|t|)) which yields under H0 the
 probability of exceeding the estimated value.
 Multi-Way Analysis of Variance with Interaction 171
-The estimator of µ, here denoted Intercept, corresponds to the mean effect. The West wind effect is not included in the list. As the constraint is
+The estimator of Âµ, here denoted Intercept, corresponds to the mean effect. The West wind effect is not included in the list. As the constraint is
 PI
 i ??i = 0, we estimate ??4 for ???(7.786 ??? 8.547 + 5.685) = ???4.924. The effect of the category Rainy is ???12.798. It is reassuring that the coefficient
 which corresponds to dry weather exceeds that associated with wet weather,
@@ -2537,7 +2537,7 @@ To check that the dataset has been imported successfully:
   Multiple models can be chosen by using Statistics ??? Fit models ??? Linear
 model... and then writing the model. If multiple models have been constructed, it is possible to test one against another by using Model ??? Hypothesis
 tests ??? Compare two models...
-By default, the outputs are estimates of parameters µ, ??i
+By default, the outputs are estimates of parameters Âµ, ??i
 , ??j and ??ij with
 "reference cell" constraints. To change this constraint to a sum constraint, use
 Tools ??? Options... ??? then in contrasts, replace contr.Treatment and
