@@ -1,3 +1,25 @@
+ data(cars)
+ head(cars)
+
+ plot(cars$dist ~ cars$speed)
+
+ lines(lowess(cars$dist ~ cars$speed))
+
+ a <- lm(dist ~ poly(speed,1,raw=TRUE),data=cars)
+ b <- lm(dist ~ poly(speed,2,raw=TRUE),data=cars)
+
+ lines(cars$speed, predict(a),col=2)
+ lines(cars$speed, predict(b),col=3)
+
+print(b)
+
+c <- data.frame(speed = 17)
+
+result <-  predict(b,c)
+
+print(result)
+
+
 options(prompt="R> ")
 
 ##################
