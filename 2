@@ -49,19 +49,19 @@ The arithmetic mean is arguably the most common measure of centrality
 (Section 13.2.1) used when summarizing a data set.
 Mathematically, the variability inherent in an estimated sample mean
 is described as follows: Formally, denote the random variable of interest as
-X¯ . This represents the mean of a sample of n observations from the "raw
+XÂ¯ . This represents the mean of a sample of n observations from the "raw
 observation" random variable X, as in x1, x2,. . . , xn. Those observations are
-assumed to have a true finite mean ?????? < µX < ??? and a true finite standard
+assumed to have a true finite mean ?????? < ÂµX < ??? and a true finite standard
 deviation 0 < ??X < ???. The conditions for finding the probability distribution of a sample mean vary depending on whether you know the value of the
 standard deviation.
 368 Chapter 17
 Situation 1: Standard Deviation Known
 When the true value of the standard deviation ??X is known, then the following are true:
-  . If X itself is normal, the sampling distribution of X¯ is a normal distribution, with mean µX and standard error ??X/
+  . If X itself is normal, the sampling distribution of XÂ¯ is a normal distribution, with mean ÂµX and standard error ??X/
   ???
 n.
-. If X is not normal, the sampling distribution of X¯ is still approximately
-normal, with mean µX and standard error ??X/
+. If X is not normal, the sampling distribution of XÂ¯ is still approximately
+normal, with mean ÂµX and standard error ??X/
   ???
 n, and this approximation improves arbitrarily as n ??? ???. This is known as the central limit
 theorem (CLT).
@@ -70,27 +70,27 @@ In practice, you commonly won't know the true value of the standard deviation of
 In this eventuality, it's usual to just replace ??X with sX, which is the standard deviation of the sampled data. However, this substitution introduces
 additional variability that affects the distribution associated with the sample
 mean random variable.
-. Standardized values (Section 16.2.2) of the sampling distribution of X¯
+. Standardized values (Section 16.2.2) of the sampling distribution of XÂ¯
 follow a t-distribution with ?? = n ??? 1 degrees of freedom; standardization
 is performed using the standard error sX/
   ???
 n.
 . If, additionally, n is small, then it is necessary to assume the distribution
-of X is normal for the validity of this t-based sampling distribution of X¯ .
-The nature of the sampling distribution of X¯ therefore depends upon
+of X is normal for the validity of this t-based sampling distribution of XÂ¯ .
+The nature of the sampling distribution of XÂ¯ therefore depends upon
 whether the true standard deviation of the observations is known, as well
 as the sample size n. The CLT states that normality occurs even if the raw
 observation distribution is itself not normal, but this approximation is less
 reliable if n is small. It's a common rule of thumb to rely on the CLT only
 if n ??? 30. If sX, the sample standard deviation, is used to calculate the
-standard error of X¯ , then the sampling distribution is the t-distribution
+standard error of XÂ¯ , then the sampling distribution is the t-distribution
 (following standardization). Again, this is generally taken to be reliable
 only if n ??? 30.
 Example: Dunedin Temperatures
 As an example, suppose that the daily maximum temperature in the month
 of January in Dunedin, New Zealand, follows a normal distribution, with a
 mean of 22 degrees Celsius and a standard deviation of 1.5 degrees. Then,
-in line with the comments for situation 1, for samples of size n = 5, the sampling distribution of X¯ will be normal, with mean 22 and standard error
+in line with the comments for situation 1, for samples of size n = 5, the sampling distribution of XÂ¯ will be normal, with mean 22 and standard error
 1.5/
   ???
 5 ??? 0.671.
@@ -106,7 +106,7 @@ R> fx <- dnorm(xvals,22,1.5)
 R> lines(xvals,fx,lwd=2)
 R> legend("topright",legend=c("raw obs. distbn.","sampling distbn. (mean)"),
           lty=1:2,lwd=c(2,2),bty="n")
-In this example, the sampling distribution of X¯ is clearly a taller, skinnier normal distribution than the one tied to the observations. This makes
+In this example, the sampling distribution of XÂ¯ is clearly a taller, skinnier normal distribution than the one tied to the observations. This makes
 sense-you expect less variability in an average of several measurements as
 opposed to the raw, individual measurements. Furthermore, the presence
 of n in the denominator of the standard error dictates a more precise distribution around the mean if you increase the sample size. Again, this makes
@@ -118,7 +118,7 @@ of less than 21.5 degrees:
   R> pnorm(21.5,mean=22,sd=1.5)
 [1] 0.3694413
 The next bit of code provides the probability that the sample mean will
-be less than 21.5 degrees, Pr(X¯ < 21.5), based on a sample of five random
+be less than 21.5 degrees, Pr(XÂ¯ < 21.5), based on a sample of five random
 days in January:
   R> pnorm(21.5,mean=22,sd=1.5/sqrt(5))
 [1] 0.2280283
@@ -143,8 +143,8 @@ for n = 5, based on an N(22,1.5) raw observation distribution. Top:
   the t-based version of the sampling distribution, using 4 degrees
 of freedom (in other words, assuming s has been used to calculate
             the standard error), compared to a standard normal. Shaded areas
-represent Pr(X < 21.5), Pr(X¯ < 21.5) (solid and dashed, topmost
-                                       plot) and Pr(T < (21.5 ??? x¯)/(s/
+represent Pr(X < 21.5), Pr(XÂ¯ < 21.5) (solid and dashed, topmost
+                                       plot) and Pr(T < (21.5 ??? xÂ¯)/(s/
                                                                        ???
                                                                      5)) (dotted, bottom plot).
 To evaluate the probabilities, note that you've required knowledge of
@@ -159,8 +159,8 @@ R> obs
 [1] 22.92233 23.09505 20.98653 20.10941 22.33888
 Now, for the sake of the example, say these five values constitute all the
 data you have for this particular problem; in other words, pretend you don't
-know that µX = 22 and ??X = 1.5. Your best guesses of the true values of µX
-and ??X, denoted x¯ and s, respectively, are therefore as follows:
+know that ÂµX = 22 and ??X = 1.5. Your best guesses of the true values of ÂµX
+and ??X, denoted xÂ¯ and s, respectively, are therefore as follows:
   R> obs.mean <- mean(obs)
 R> obs.mean
 [1] 21.89044
@@ -172,7 +172,7 @@ The estimated standard error can be calculated:
 R> obs.mean.se
 [1] 0.5790549
 Because n = 5 is relatively small, you must assume the values in obs are
-realizations from a normal distribution, in line with the points made for situation 2. This allows you to handle the sampling distribution of X¯ using the
+realizations from a normal distribution, in line with the points made for situation 2. This allows you to handle the sampling distribution of XÂ¯ using the
 t-distribution with 4 degrees of freedom. Recall from Section 16.2.3, though,
 that any t-distribution is typically placed on a standardized scale. Therefore,
 for you to find the probability that the mean temperature (in a sample of
@@ -192,7 +192,7 @@ as follows.
 R> pt(t4,df=4)
 [1] 0.26855
 Note that when you calculated the "true" theoretical probability from
-the sampling distribution of Pr(X¯ < 21.5), you got a result of about 0.23 (see
+the sampling distribution of Pr(XÂ¯ < 21.5), you got a result of about 0.23 (see
                                                                             page 370), but the same probability based on standardization using sample
 statistics of the data obs (in other words, estimates of the true theoretical
                             values Pr(T < t4)) has been computed as 0.27 (2 d.p.).
@@ -340,7 +340,7 @@ In Section 16.2.4, the time between cars passing an individual's
 location was modeled using an exponential distribution. Say that on
 the other side of town, her friend is curious about a similar problem.
 Standing outside her house, she records 63 individual times between
-cars passing. These sampled times have a mean of x¯ = 37.8 seconds
+cars passing. These sampled times have a mean of xÂ¯ = 37.8 seconds
 with a standard deviation of s = 34.51 seconds.
 376 Chapter 17
 g. The friend inspects a histogram of her raw measurements
@@ -387,26 +387,26 @@ expressed as a percentage. As such, it is a common and useful tool built
 directly from the sampling distribution of the statistic of interest.
 The following are the important points to note:
   . The level of confidence is usually expressed as a percentage, such that
-you'd construct a 100 × (1 ??? ??) percent confidence interval, where
+you'd construct a 100 Ã— (1 ??? ??) percent confidence interval, where
 0 < ?? < 1 is an "amount of tail probability."
 . The three most common intervals are defined with either ?? = 0.1 (a
                                                                    90 percent interval), ?? = 0.05 (a 95 percent interval), or ?? = 0.01
 (a 99 percent interval).
 . Colloquially, you'd state the interpretation of a confidence interval (l,u)
-as "I am 100 × (1 ??? ??) percent confident that the true parameter value
+as "I am 100 Ã— (1 ??? ??) percent confident that the true parameter value
 lies somewhere between l and u."
 Confidence intervals may be constructed in different ways, depending
 on the type of statistic and therefore the shape of the corresponding sampling distribution. For symmetrically distributed sample statistics, like those
 involving means and proportions that will be used in this chapter, a general
 formula is
-statistic ± critical value × standard error, (17.2)
+statistic Â± critical value Ã— standard error, (17.2)
 where statistic is the sample statistic under scrutiny, critical value is a value
 from the standardized version of the sampling distribution that corresponds
 to ??, and standard error is the standard deviation of the sampling distribution. The product of the critical value and standard error is referred to
 as the error component of the interval; subtraction of the error component
 from the value of the statistic provides l, and addition provides u.
 With reference to the appropriate sampling distribution, all that a CI
-yields are the two values of the distribution that mark off the central 100 ×
+yields are the two values of the distribution that mark off the central 100 Ã—
 (1 ??? ??) percent of the area under the density. (This is the process that was
                                                 briefly mentioned in Exercise 17.1 (f).) You then use the CI to make further
 interpretations concerning the true (typically unknown) parameter value
@@ -430,14 +430,14 @@ the lower tail and the same in the upper tail.
 Return to the example from Section 17.1.1, dealing with the mean daily
 maximum temperatures (degrees Celsius) in January for Dunedin, New
 Zealand. Suppose you know the observations are normally distributed but
-you don't know the true mean µX (which is set at 22) or the true standard
+you don't know the true mean ÂµX (which is set at 22) or the true standard
 deviation ??X (which is set at 1.5). Setting it up in the same way as earlier,
 assume you've made the following five independent observations:
   R> temp.sample <- rnorm(n=5,mean=22,sd=1.5)
 R> temp.sample
 [1] 20.46097 21.45658 21.06410 20.49367 24.92843
 As you're interested in the sample mean and its sampling distribution,
-you must calculate the sample mean x¯, the sample standard deviation s, and
+you must calculate the sample mean xÂ¯, the sample standard deviation s, and
 the appropriate standard error of the sample mean, s/
   ???
 n.
@@ -451,7 +451,7 @@ R> temp.se <- temp.sd/sqrt(5)
 R> temp.se
 [1] 0.8329155
 Now, let's say the aim is to construct a 95 percent confidence interval
-for the true, unknown mean µX. This implies ?? = 0.05 (the total amount of
+for the true, unknown mean ÂµX. This implies ?? = 0.05 (the total amount of
                                                       tail probability) for the relevant sampling distribution. Given the fact that
 you know the raw observations are normal and that you're using s (not ??X),
 the appropriate distribution is the t-distribution with n ??? 1 = 4 degrees of
@@ -478,7 +478,7 @@ can confirm this using pt.
 R> pt(critval,4)-pt(-critval,4)
 [1] 0.95
 So, all the ingredients are present. You find the 95 percent confidence
-interval for the true mean µX via Equation (17.2) with the following lines,
+interval for the true mean ÂµX via Equation (17.2) with the following lines,
 which give l and u, respectively:
   R> temp.mean-critval*temp.se
 [1] 19.36821
@@ -771,15 +771,15 @@ stores and recorded the weights as follows:
                  78.89,77.14,69.94,78.54,79.7,82.45,77.29,75.52,77.21,75.99,
                  81.94,80.41,77.7)
 The customer claims that they've been shortchanged because their data
-cannot have arisen from a distribution with mean µ = 80, so the true mean
+cannot have arisen from a distribution with mean Âµ = 80, so the true mean
 weight must be less than 80. To investigate this claim, the manufacturer conducts a hypothesis test using a significance level of ?? = 0.05.
 First, the hypotheses must be defined, with a null value of 80 grams.
 Remember, the alternative hypothesis is "what you're testing for"; in this
-case, HA is that µ is smaller than 80. The null hypothesis, interpreted as "no
-change," will be defined as µ = 80: that the true mean is in fact 80 grams.
+case, HA is that Âµ is smaller than 80. The null hypothesis, interpreted as "no
+change," will be defined as Âµ = 80: that the true mean is in fact 80 grams.
 These hypotheses are formalized like this:
-  H0 : µ = 80
-HA : µ < 80 (18.1)
+  H0 : Âµ = 80
+HA : Âµ < 80 (18.1)
 Second, the mean and standard deviation must be estimated from the
 sample.
 R> n <- length(snacks)
@@ -795,14 +795,14 @@ standard deviation, what's the probability of observing a sample mean (when
 you need to calculate the relevant test statistic.
 Hypothesis Testing 389
 Formally, the test statistic T in a hypothesis test for a single mean with
-respect to a null value of µ0 is given as
+respect to a null value of Âµ0 is given as
 T =
-  x¯ ??? µ0
+  xÂ¯ ??? Âµ0
 (s/
     ???
   n)
 (18.2)
-based on a sample of size n, a sample mean of x¯, and a sample standard deviation of s (the denominator is the estimated standard error of the mean).
+based on a sample of size n, a sample mean of xÂ¯, and a sample standard deviation of s (the denominator is the estimated standard error of the mean).
 Assuming the relevant conditions have been met, T follows a t-distribution
 with ?? = n ??? 1 degrees of freedom.
 In R, the following provides you with the standard error of the sample
@@ -826,9 +826,9 @@ done, as shown here:
 [1] 0.01132175
 Your result states that if the H0 were true, there would be only a little
 more than a 1 percent chance that you'd observe the customer's sample
-mean of x¯ = 78.91, or less, as a random phenomenon. Since this p-value is
+mean of xÂ¯ = 78.91, or less, as a random phenomenon. Since this p-value is
 smaller than the predefined significance level of ?? = 0.05, the manufacturer concludes that there is sufficient evidence to reject the null hypothesis
-in favor of the alternative, suggesting the true value of µ is in fact less than
+in favor of the alternative, suggesting the true value of Âµ is in fact less than
 80 grams.
 Note that if you find the corresponding 95 percent CI for the single
 sample mean, as described in Section 17.2.1 and given by
@@ -892,7 +892,7 @@ weight of 3.5 kilograms. A feline enthusiast disagrees and collects
 a sample of 73 weights of cats of this breed. From her sample,
 she calculates a mean of 3.97 kilograms and a standard deviation
 of 2.21 kilograms. Perform a hypothesis test to test her claim
-that the true mean weight µ is not 3.5 kilograms by setting up the
+that the true mean weight Âµ is not 3.5 kilograms by setting up the
 appropriate hypothesis, carrying out the analysis, and interpreting the p-value (assume the significance level is ?? = 0.05).
 b. Suppose it was previously believed that the mean magnitude of
 seismic events off the coast of Fiji is 4.3 on the Richter scale. Use
@@ -906,13 +906,13 @@ mean of (b).
 18.2.2 Two Means
 Often, testing a single sample mean isn't enough to answer the question
 you're interested in. In many settings, a researcher wants to directly compare the means of two distinct groups of measurements, which boils down
-to a hypothesis test for the true difference between two means; call them µ1
-and µ2.
+to a hypothesis test for the true difference between two means; call them Âµ1
+and Âµ2.
 The way in which two groups of data relate to each other affects the specific form of standard error for the difference between two sample means
 and therefore the test statistic itself. The actual comparison of the two
 392 Chapter 18
 means, however, is often of the same nature-the typical null hypothesis is
-usually defined as µ1 and µ2 being equal. In other words, the null value of
+usually defined as Âµ1 and Âµ2 being equal. In other words, the null value of
 the difference between the two means is often zero.
 Unpaired/Independent Samples: Unpooled Variances
 The most general case is where the two sets of measurements are based on
@@ -933,21 +933,21 @@ R> snacks2 <- c(80.22,79.73,81.1,78.76,82.03,81.66,80.97,81.32,80.12,78.98,
                 79.08,79.47,78.98,80.87,82.24,77.22,80.03,79.2,80.95,79.17,81)
 From Section 18.2.1, you already know the mean and standard deviation
 of the first sample of size n1 = 44-these are stored as snack.mean (around
-                                                                    78.91) and snack.sd (around 3.06), respectively-think of these as x¯1 and s1.
-Compute the same quantities, x¯2 and s2, respectively, for the new data.
+                                                                    78.91) and snack.sd (around 3.06), respectively-think of these as xÂ¯1 and s1.
+Compute the same quantities, xÂ¯2 and s2, respectively, for the new data.
 R> snack2.mean <- mean(snacks2)
 R> snack2.mean
 [1] 80.1571
 R> snack2.sd <- sd(snacks2)
 R> snack2.sd
 [1] 1.213695
-Let the true mean of the original sample be denoted with µ1 and the
+Let the true mean of the original sample be denoted with Âµ1 and the
 true mean of the new sample from the rival company packs be denoted with
-µ2. You're now interested in testing whether there is statistical evidence to
-support the claim that µ2 is greater than µ1. This suggests the hypotheses of
-H0 : µ1 = µ2 and HA : µ1 < µ2, which can be written as follows:
-  H0 : µ2 ??? µ1 = 0
-HA : µ2 ??? µ1 > 0
+Âµ2. You're now interested in testing whether there is statistical evidence to
+support the claim that Âµ2 is greater than Âµ1. This suggests the hypotheses of
+H0 : Âµ1 = Âµ2 and HA : Âµ1 < Âµ2, which can be written as follows:
+  H0 : Âµ2 ??? Âµ1 = 0
+HA : Âµ2 ??? Âµ1 > 0
 That is, the difference between the true mean of the rival company
 packs and the original manufacturer's packs, when the original is subtracted
 Hypothesis Testing 393
@@ -955,13 +955,13 @@ from the rival, is bigger than zero. The "no-change" scenario, the null
 hypothesis, is that the two means are the same, so their difference is
 truly zero.
 Now that you've constructed the hypotheses, let's look at how to actually test them. The difference between two means is the quantity of interest.
-For two independent samples arising from populations with true means µ1
-and µ2, sample means x¯1 and x¯2, and sample standard deviations s1 and s2,
+For two independent samples arising from populations with true means Âµ1
+and Âµ2, sample means xÂ¯1 and xÂ¯2, and sample standard deviations s1 and s2,
 respectively (and that meet the relevant conditions for the validity of the
               t-distribution), the standardized test statistic T for testing the difference
-between µ2 and µ1, in that order, is given as
+between Âµ2 and Âµ1, in that order, is given as
 T =
-  x¯2 ??? x¯1 ??? µ0
+  xÂ¯2 ??? xÂ¯1 ??? Âµ0
 q
 s
 2
@@ -993,20 +993,20 @@ whose distribution is approximated by a t-distribution with ?? degrees of freedo
 2/(n2 ??? 1)
 %
 (18.4)
-In (18.3), µ0 is the null value of interest-typically zero in tests concerned with "difference" statistics. This term would therefore disappear
+In (18.3), Âµ0 is the null value of interest-typically zero in tests concerned with "difference" statistics. This term would therefore disappear
 from the numerator of the test statistic. The denominator of T is the standard error of the difference between two means in this setting.
-The ??? · ??? on the right of Equation (18.4) denotes a floor operation-
+The ??? Â· ??? on the right of Equation (18.4) denotes a floor operation-
 rounding strictly down to the nearest integer.
 NOTE This two-sample t-test, conducted using Equation (18.3), is also called Welch's
 t-test. This refers to use of Equation (18.4), called the Welch-Satterthwaite equation. Crucially, it assumes that the two samples have different true variances, which
 is why it's called the unpooled variance version of the test.
 It's important to be consistent when defining your two sets of parameters and when constructing the hypotheses. In this example, since the test
-aims to find evidence for µ2 being greater than µ1, a difference of µ2???µ1 > 0
+aims to find evidence for Âµ2 being greater than Âµ1, a difference of Âµ2???Âµ1 > 0
 forms HA (a greater-than, upper-tailed test), and this order of subtraction
 is mirrored when calculating T. The same test could be carried out if you
 defined the difference the other way around. In that case, your alternative
 hypothesis would suggest a lower-tailed test because if you're testing for
-µ2 being bigger than µ1, HA would correctly be written as µ1 ??? µ2 < 0.
+Âµ2 being bigger than Âµ1, HA would correctly be written as Âµ1 ??? Âµ2 < 0.
 Again, this would modify the order of subtraction in the numerator of Equation (18.3) accordingly.
 The same care must apply to the use of t.test for two-sample comparisons. The two samples must be supplied as the arguments x and y, but the
 function interprets x as greater than y when doing an upper-tailed test and
@@ -1058,9 +1058,9 @@ of freedom in the corresponding t-distribution. However, if you can assume
 equivalence of variances, the precision of the test is improved-you use a
 different formula for the standard error of the difference and for calculating
 the associated df.
-Again, the quantity of interest is the difference between two means, written as µ2 ??? µ1. Assume you have two independent samples of sizes n1 and n2
-arising from populations with true means µ1 and µ2, sample means x¯1 and
-x¯2, and sample standard deviations s1 and s2, respectively, and assume that
+Again, the quantity of interest is the difference between two means, written as Âµ2 ??? Âµ1. Assume you have two independent samples of sizes n1 and n2
+arising from populations with true means Âµ1 and Âµ2, sample means xÂ¯1 and
+xÂ¯2, and sample standard deviations s1 and s2, respectively, and assume that
 the relevant conditions for the validity of the t-distribution have been met.
 Additionally, assume that the true variances of the samples, ??
 2
@@ -1084,7 +1084,7 @@ s2
 < 2, you can use the pooled variance test statistic that follows.
 The standardized test statistic T for this scenario is given as
 T =
-  x¯2 ??? x¯1 ??? µ0
+  xÂ¯2 ??? xÂ¯1 ??? Âµ0
 q
 s
 2
@@ -1106,7 +1106,7 @@ n1 + n2 ??? 2
 is the pooled estimate of the variance of all the raw measurements. This is substituted in place of s1 and s2 in the denominator of Equation (18.3), resulting
 in Equation (18.5).
 All other aspects of the two-sample t-test remain as earlier, including the
-construction of appropriate hypotheses, the typical null value of µ0, and the
+construction of appropriate hypotheses, the typical null value of Âµ0, and the
 calculation and interpretation of the p-value.
 For the comparison of the two means in the snack pack example, you'd
 find it difficult to justify using the pooled version of the t-test. Applying
@@ -1124,8 +1124,8 @@ average IQ of the population is said to be 100. Say that you're interested in
 assessing whether there is a difference in mean IQ scores between men and
 women, suggesting the following hypotheses where you have nmen = 12 and
 nwomen = 20:
-  H0 : µmen ??? µwomen = 0
-HA : µmen ??? µwomen , 0
+  H0 : Âµmen ??? Âµwomen = 0
+HA : Âµmen ??? Âµwomen , 0
 You randomly sample the following data:
   R> men <- c(102,87,101,96,107,101,91,85,108,67,85,82)
 R> women <- c(73,81,111,109,143,95,92,120,93,89,119,79,90,126,62,92,77,106,
@@ -1139,7 +1139,7 @@ R> mean(women)
 [1] 98.65
 R> sd(women)
 [1] 19.94802
-These give the sample averages x¯men and x¯women, as well as their respective sample standard deviations smen and swomen. Enter the following to
+These give the sample averages xÂ¯men and xÂ¯women, as well as their respective sample standard deviations smen and swomen. Enter the following to
 quickly check the ratio of the standard deviations:
   R> sd(women)/sd(men)
 [1] 1.652626
@@ -1176,7 +1176,7 @@ other important or obvious way. A classic example of this is "before" and
 and after some kind of intervention treatment. These situations still focus on
 the difference between the mean outcomes in each group, but rather than
 working with the two data sets separately, a paired t-test works with a single
-mean-the true mean of the individual paired differences µd.
+mean-the true mean of the individual paired differences Âµd.
 As an example, consider a company interested in the efficacy of a drug
 designed to reduce resting heart rates in beats per minute (bpm). The resting heart rates of 16 individuals are measured. The individuals are then
 administered a course of the treatment, and their resting heart rates are
@@ -1202,7 +1202,7 @@ pairwise differences:
   R> rate.d <- rate.after-rate.before
 R> rate.d
 [1] -1 0 -18 -14 -19 -4 -6 -14 -9 -5 -5 1 -11 -7 -5 -2
-The following code calculates the sample mean d¯ and standard deviation sd of these differences:
+The following code calculates the sample mean dÂ¯ and standard deviation sd of these differences:
   R> rate.dbar <- mean(rate.d)
 R> rate.dbar
 [1] -7.4375
@@ -1211,25 +1211,25 @@ R> rate.sd
 [1] 6.196437
 You want to see how much the heart rate is reduced by, so the test at
 hand will be concerned with the following hypotheses:
-  H0 : µd = 0
-HA : µd < 0
+  H0 : Âµd = 0
+HA : Âµd < 0
 Given the order or subtraction used to obtain the differences, detection
 of a successful reduction in heart rate will be represented by an "after" mean
 that is smaller than the "before" mean.
 Expressing all this mathematically, the value of interest is the true mean
-difference, µd, between two means of dependent pairs of measurements.
+difference, Âµd, between two means of dependent pairs of measurements.
 There are two sets of n measurements, x1, . . ., xn and y1, . . ., yn, with pairwise differences d1, . . ., dn. The relevant conditions for the validity of the
 t-distribution must be met; in this case, if the number of pairs n is less than
 30, then you must be able to assume the raw data are normally distributed.
 The test statistic T is given as
 T =
-  d¯??? µ0
+  dÂ¯??? Âµ0
 sd/
   ???
 n
 , (18.7)
-where d¯ is the mean of the pairwise differences, sd is the sample standard
-deviation of the pairwise differences, and µ0 is the null value (usually zero).
+where dÂ¯ is the mean of the pairwise differences, sd is the sample standard
+deviation of the pairwise differences, and Âµ0 is the null value (usually zero).
 The statistic T follows a t-distribution with n ??? 1 df.
 The form of Equation (18.7) is actually the same as the form of the
 test statistic in (18.2), once the sample statistics for the individual paired
@@ -1282,14 +1282,14 @@ women suffering from the disease, obtained from Hand et al. (1994).
 One group of women is the control group (in other words, no intervention), and the other two groups are the cognitive behavioral
 program and family support intervention program groups. Load the
 library and ensure you can access the data frame and understand its
-contents. Let µd denote the mean difference in weight, computed as
+contents. Let Âµd denote the mean difference in weight, computed as
 (post-weight ??? pre-weight).
 a. Regardless of which treatment group the participants fall
 into, conduct and conclude an appropriate hypothesis test
 with ?? = 0.05 for the entire set of weights for the following
 hypotheses:
-  H0 : µd = 0
-HA : µd > 0
+  H0 : Âµd = 0
+HA : Âµd > 0
 b. Next, conduct three separate hypothesis tests using the same
 defined hypotheses, based on which treatment group the participants fall into. What do you notice?
   Another ready-to-use data set in R is PlantGrowth (Dobson, 1983),
@@ -1867,7 +1867,7 @@ Herbal 52 32 12
 A two-dimensional table presenting frequencies in this fashion is called a
 contingency table.
 Calculation: Chi-Squared Test of Independence
-To compute the test statistic, presume data are presented as a kr × kc contingency table, in other words, a matrix of counts, based on two categorical
+To compute the test statistic, presume data are presented as a kr Ã— kc contingency table, in other words, a matrix of counts, based on two categorical
 variables (both mutually exclusive and exhaustive). The focus of the test is
 the way in which the frequencies of N observations between the kr levels
 of the "row" variable and the kc levels of the "column" variable are jointly
@@ -1894,7 +1894,7 @@ E[i, j] =
 u=1
 O[u, j]
 
-×
+Ã—
 Pkc
 v=1
 O[i,v]
@@ -1903,7 +1903,7 @@ N
 (18.13)
 The result, ??
 2
-, follows a chi-squared distribution with ?? = (kr ??? 1) ×
+, follows a chi-squared distribution with ?? = (kr ??? 1) Ã—
 (kc ??? 1) degrees of freedom. Again, the p-value is always an upper-tailed
 area, and you can consider the test valid with the satisfaction of the condition that at least 80 percent of the E[i, j] are at least 5.
 For this calculation, it's important to note the following:
@@ -2008,7 +2008,7 @@ R> X2
 The corresponding p-value for this test of independence is as follows:
   R> 1-pchisq(X2,df=(kr-1)*(kc-1))
 [1] 2.492451e-12
-Recall that the relevant degrees of freedom are defined as ?? = (kr ??? 1) ×
+Recall that the relevant degrees of freedom are defined as ?? = (kr ??? 1) Ã—
 (kc ??? 1).
 The extremely small p-value provides strong evidence against the null
 hypothesis. The appropriate conclusion would be to reject H0 and state that
@@ -2025,7 +2025,7 @@ data: skin
 X-squared = 66.1662, df = 6, p-value = 2.492e-12
 Exercise 18.4
 HairEyeColor is a ready-to-use data set in R that you haven't yet come
-across. This 4 × 4 × 2 array provides frequencies of hair and eye colors
+across. This 4 Ã— 4 Ã— 2 array provides frequencies of hair and eye colors
 of 592 statistics students, split by sex (Snee, 1974).
 a. Perform and interpret, at a significance level of ?? = 0.01, a chisquared test of independence for hair against eye color for all
 students, regardless of their sex.
@@ -2076,11 +2076,11 @@ If your p-value is less than ??, you reject the null statement. If the null is
 really true, though, the ?? directly defines the probability that you incorrectly
 reject it. This is referred to as a Type I error.
 Figure 18-2 provides a conceptual illustration of a Type I error probability for a supposed hypothesis test of a sample mean, where the hypotheses
-are set up as H0 : µ = µ0 and HA : µ > µ0.
+are set up as H0 : Âµ = Âµ0 and HA : Âµ > Âµ0.
 Figure 18-2: A conceptual diagram of the Type I error
 probability ??
-The null hypothesis distribution is centered on the null value µ0; the
-alternative hypothesis distribution is centered to its right at some mean µA
+The null hypothesis distribution is centered on the null value Âµ0; the
+alternative hypothesis distribution is centered to its right at some mean ÂµA
 in Figure 18-2. As you can see, if the null hypothesis is really true, then the
 probability it is incorrectly rejected for this test will be equal to the significance level ??, located in the upper tail of the null distribution.
 Simulating Type I Errors
@@ -2101,7 +2101,7 @@ return(mean(pvals<alpha))
 }
 The typeI.tester function is designed to generate ITERATIONS samples
 from a particular normal distribution. With each sample, you'll perform an
-upper-tailed test of the mean (refer to Section 18.2.1) in the spirit of Figure 18-2, assuming the hypotheses of H0 : µ = µ0 and HA : µ > µ0.
+upper-tailed test of the mean (refer to Section 18.2.1) in the spirit of Figure 18-2, assuming the hypotheses of H0 : Âµ = Âµ0 and HA : Âµ > Âµ0.
 You can decrease ITERATIONS to generate fewer entire samples, and this
 will speed up computation time but will result in simulated rates that are
 more variable. Each entire sample of size n of hypothetical raw measurements is generated using rnorm with the mean equal to the mu0 argument
@@ -2118,7 +2118,7 @@ from the simulated samples. Remember, the samples are generated randomly, so you
 function.
 This function works because, by definition of the problem, the samples
 that are being generated come from a distribution that truly has the mean
-set at the null value, in other words, µA = µ0. Therefore, any statistical rejection of this statement, obtained with a p-value less than the significance level
+set at the null value, in other words, ÂµA = Âµ0. Therefore, any statistical rejection of this statement, obtained with a p-value less than the significance level
 ??, is clearly incorrect and is purely a result of random variation.
 To try this, import the function and execute it generating the default
 ITERATIONS=10000 samples. Use the standard normal as the null (and "true" in
@@ -2127,7 +2127,7 @@ level at the conventional ?? = 0.05. Here's an example:
 R> typeI.tester(mu0=0,sigma=1,n=40,alpha=0.05)
 [1] 0.0489
 422 Chapter 18
-This indicates that 10,000 × 0.0489 = 489 of the samples taken yielded a
+This indicates that 10,000 Ã— 0.0489 = 489 of the samples taken yielded a
 corresponding test statistic that provided a p-value, which would incorrectly
 result in rejection of H0. This simulated Type I error rate lies close to the
 preset alpha=0.05.
@@ -2178,8 +2178,8 @@ Figure 18-3: A conceptual diagram of the Type II error
 probability ??
 It's not as easy to find ?? as it is to find the probability of making a Type I
 error because ?? depends, among other things, on what the true value of
-µA is (which in general you won't know). If µA is closer to the hypothesized
-null value of µ0, you can imagine the alternative distribution in Figure 18-3
+ÂµA is (which in general you won't know). If ÂµA is closer to the hypothesized
+null value of Âµ0, you can imagine the alternative distribution in Figure 18-3
 translating (shifting) to the left, resulting in an increase in ??. Similarly, staying with Figure 18-3, imagine decreasing the significance level ??. Doing so
 means the vertical dashed line (denoting the corresponding critical value)
 moves to the right, also increasing the shaded area of ??. Intuitively, this
@@ -2188,16 +2188,16 @@ smaller the significance level, the harder HA is to detect by rejection of H0.
 As noted, ?? usually can't be calculated in practice because of the need
 to know what the true distribution actually is. This quantity is, however, useful in giving you an idea of how prone a test is to the incorrect retention of
 a null hypothesis under particular conditions. Suppose, for example, you're
-performing a one-sample t-test for H0 : µ = µ0 and HA : µ > µ0 with µ0 = 0
+performing a one-sample t-test for H0 : Âµ = Âµ0 and HA : Âµ > Âµ0 with Âµ0 = 0
 but that the (true) alternative distribution of the raw measurements has
-mean µA = 0.5 and standard deviation ?? = 1. Given a random sample of
+mean ÂµA = 0.5 and standard deviation ?? = 1. Given a random sample of
 size n = 30 and using ?? = 0.05, what is the probability of committing a
 Type II error in any given hypothesis test (using the same standard deviation
 424 Chapter 18
 for the null distribution)? To answer this, look again at Figure 18-3; you
 need the critical value marked off by the significance level (the dashed
 vertical line). If you assume ?? is known, then the sampling distribution of
-interest will be normal with mean µ0 = 0 and a standard error of 1/
+interest will be normal with mean Âµ0 = 0 and a standard error of 1/
 ???
 30 (see
 Section 17.1.1). Therefore, with an upper-tail area of 0.05, you can find the
@@ -2227,7 +2227,7 @@ return(mean(pvals>=alpha))
 }
 This function is similar to typeI.tester. The null value, standard deviation of raw measurements, sample size, significance level, and number of
 iterations are all as before. Additionally, you now have muA, providing the
-"true" mean µA under which to generate the samples. Again, at each iteration, a random sample of size n is generated, its mean and standard deviation are calculated, and the appropriate p-value for the test is computed
+"true" mean ÂµA under which to generate the samples. Again, at each iteration, a random sample of size n is generated, its mean and standard deviation are calculated, and the appropriate p-value for the test is computed
 using pt from the usual standardized test statistic with df=n-1. (Remember,
 since you're estimating the true standard deviation of the measurements
 ?? with the sample standard deviation s, it's technically correct to use the
@@ -2264,7 +2264,7 @@ A smaller or larger sample size will have a similar impact. Located in
 the denominator of the standard error formula, a smaller n will result in a
 larger standard error and hence that flatter curve and an increased ??;
 a larger sample size will have the opposite effect. If you remain with the
-latest values of µ0 = 0, µA = 0.5, ?? = 1.2, and ?? = 0.01, note that reducing
+latest values of Âµ0 = 0, ÂµA = 0.5, ?? = 1.2, and ?? = 0.01, note that reducing
 426 Chapter 18
 the sample size to 20 (from 30) results in an increased simulated Type II
 error rate compared with the most recent result of 0.5501, but increasing
@@ -2274,10 +2274,10 @@ R> typeII.tester(mu0=0,muA=0.5,sigma=1.2,n=20,alpha=0.01)
 R> typeII.tester(mu0=0,muA=0.5,sigma=1.2,n=40,alpha=0.01)
 [1] 0.4219
 Finally, as noted at the beginning of the discussion, the specific value of
-µA itself affects ?? just as you'd expect. Again, keeping the latest values for
+ÂµA itself affects ?? just as you'd expect. Again, keeping the latest values for
 all other components, which resulted in my case in ?? = 0.4219, note that
-shifting the "true" mean closer to µ0 by changing from µA = 0.5 to µA = 0.4
-means the probability of committing a Type II error is increased; the opposite is true if the difference is increased to µA = 0.6.
+shifting the "true" mean closer to Âµ0 by changing from ÂµA = 0.5 to ÂµA = 0.4
+means the probability of committing a Type II error is increased; the opposite is true if the difference is increased to ÂµA = 0.6.
 R> typeII.tester(mu0=0,muA=0.4,sigma=1.2,n=40,alpha=0.01)
 [1] 0.6147
 R> typeII.tester(mu0=0,muA=0.6,sigma=1.2,n=40,alpha=0.01)
@@ -2313,24 +2313,24 @@ multiplied by 2 in a "real" hypothesis test), then a rejection
 of the null should be flagged.
 - If the value of test is not one of the three possibilities, the
 function should throw an appropriate error using stop.
-i. Experiment with your function using the first example setting in the text with µ0 = 0, ?? = 1, n = 40, and ?? = 0.05.
+i. Experiment with your function using the first example setting in the text with Âµ0 = 0, ?? = 1, n = 40, and ?? = 0.05.
 Call typeI.mean three times, using each of the three possible
 options for test. You should find that all simulated results sit
 close to 0.05.
 ii. Repeat (i) using the second example setting in the text with
-µ0 = ???4, ?? = 0.3, n = 60, and ?? = 0.01. Again, you should
+Âµ0 = ???4, ?? = 0.3, n = 60, and ?? = 0.01. Again, you should
 find that all simulated results sit close to the value of ??.
 b. Modify typeII.tester in the same way as you did typeI.tester; call
 the new function typeII.mean. Simulate the Type II error rates
-for the following hypothesis tests. As per the text, assume µA,
+for the following hypothesis tests. As per the text, assume ÂµA,
 ??, ??, and n denote the true mean, standard deviation of raw
 observations, significance level, and sample size, respectively.
-i. H0 : µ = ???3.2; HA : µ , ???3.2
-with µA = ???3.3, ?? = 0.1, ?? = 0.05, and n = 25.
-ii. H0 : µ = 8994; HA : µ < 8994
-with µA = 5600, ?? = 3888, ?? = 0.01, and n = 9.
-iii. H0 : µ = 0.44; HA : µ > 0.44
-with µA = 0.4, ?? = 2.4, ?? = 0.05, and n = 68.
+i. H0 : Âµ = ???3.2; HA : Âµ , ???3.2
+with ÂµA = ???3.3, ?? = 0.1, ?? = 0.05, and n = 25.
+ii. H0 : Âµ = 8994; HA : Âµ < 8994
+with ÂµA = 5600, ?? = 3888, ?? = 0.01, and n = 9.
+iii. H0 : Âµ = 0.44; HA : Âµ > 0.44
+with ÂµA = 0.4, ?? = 2.4, ?? = 0.05, and n = 68.
 18.5.4 Statistical Power
 For any hypothesis test, it is useful to consider its potential statistical power.
 Power is the probability of correctly rejecting a null hypothesis that is untrue.
@@ -2338,14 +2338,14 @@ For a test that has a Type II error rate of ??, the statistical power is found
 simply with 1 ??? ??. It's desirable for a test to have a power that's as high as
 possible. The simple relationship with the Type II error probability means
 that all factors impacting the value of ?? also directly affect power.
-For the same one-sided H0 : µ = µ0 and HA : µ > µ0 example discussed
+For the same one-sided H0 : Âµ = Âµ0 and HA : Âµ > Âµ0 example discussed
 in the previous section, Figure 18-4 shades the power of the test-the complement to the Type II error rate. By convention, a hypothesis test that has a
 power greater than 0.8 is considered statistically powerful.
 428 Chapter 18
 Figure 18-4: A conceptual diagram of statistical power 1 ??? ??
 You can numerically evaluate power under specific testing conditions
 using simulation. For the previous discussion on Type II errors, you're able
-to subtract all simulated results of ?? from 1 to evaluate the power of that particular test. For example, the power of detection of µA = 0.6 when µ0 = 0,
+to subtract all simulated results of ?? from 1 to evaluate the power of that particular test. For example, the power of detection of ÂµA = 0.6 when Âµ0 = 0,
 taking samples of size n = 40 and with ?? = 1.2 and ?? = 0.01, is simulated as
 1 ??? 0.2287 = 0.7713 (using my most recent result of ?? from earlier). This
 means there's roughly a 77 percent chance of correctly detecting the true
@@ -2358,10 +2358,10 @@ the potential true value of the parameter of interest from past research or
 pilot studies. This is useful in helping to determine your sample size, such as
 in helping to answer questions like "How big does my sample need to be in
 order to be able to conduct a statistically powerful test to correctly reject H0,
-if the true mean is actually µA?"
+if the true mean is actually ÂµA?"
 Simulating Power
 For the most recent testing conditions, with a sample size of n = 40, you've
-seen that there's a power of around 0.77 of detecting µA = 0.6. For the
+seen that there's a power of around 0.77 of detecting ÂµA = 0.6. For the
 purposes of this example, let's say you want to find how much you should
 increase n by in order to conduct a statistically powerful test. To answer this,
 define the following function power.tester in the editor:
@@ -2423,8 +2423,8 @@ The result indicates that if your sample size is at least 43, a hypothesis
 test under these particular conditions should be statistically powerful (based
 on the randomly simulated output in pow in this instance).
 What if the significance level for this test were relaxed? Say you wanted
-to conduct the test (still upper-tailed under the condition of µ0 = 0,
-µA = 0.6, and ?? = 1.2) using a significance level of ?? = 0.05 rather than
+to conduct the test (still upper-tailed under the condition of Âµ0 = 0,
+ÂµA = 0.6, and ?? = 1.2) using a significance level of ?? = 0.05 rather than
 0.01. If you look again at Figure 18-4, this alteration means the vertical line
 (critical value) moves to the left, decreasing ?? and so increasing power. That
 would therefore suggest you'd require a smaller sample size than earlier, in
@@ -2476,16 +2476,16 @@ a. For this exercise you'll need to have written typeII.mean from
 Exercise 18.5 (b). Using this function, modify power.tester so
 that a new function, power.mean, calls typeII.mean instead of calling
 typeII.tester.
-i. Confirm that the power of the test given by H0 : µ = 10;
-HA : µ , 10, with µA = 10.5, ?? = 0.9, ?? = 0.01, and n = 50, is
+i. Confirm that the power of the test given by H0 : Âµ = 10;
+HA : Âµ , 10, with ÂµA = 10.5, ?? = 0.9, ?? = 0.01, and n = 50, is
 roughly 88 percent.
 ii. Remember the hypothesis test in Section 18.2.1 for the mean
 net weight of an 80-gram pack of snacks, based on the n = 44
 observations provided in the snack vector. The hypotheses
 were as follows:
-H0 : µ = 80
-HA : µ < 80
-If the true mean is µA = 78.5 g and the true standard
+H0 : Âµ = 80
+HA : Âµ < 80
+If the true mean is ÂµA = 78.5 g and the true standard
 deviation of the weights is ?? = 3.1 g, use power.mean to determine whether the test is statistically powerful, assuming
 ?? = 0.05. Does your answer to this change if ?? = 0.01?
 b. Staying with the snacks hypothesis test, using the sample.sizes vector from the text, determine the minimum sample size required
@@ -2524,10 +2524,10 @@ of the chicks in the built-in chickwts data set, split according to the differen
 food types they were fed.
 19.1.1 Hypotheses and Diagnostic Checking
 Say you have a categorical-nominal variable that splits a total of N numeric
-observations into k distinct groups, where k ??? 2. You're looking to statistically compare the k groups' means, µ1,. . . , µk , to see whether they can be
+observations into k distinct groups, where k ??? 2. You're looking to statistically compare the k groups' means, Âµ1,. . . , Âµk , to see whether they can be
 claimed to be equal. The standard hypotheses are as follows:
-H0 : µ1 = µ2 = . . . = µk
-HA : µ1, µ2, . . . , µk are not all equal
+H0 : Âµ1 = Âµ2 = . . . = Âµk
+HA : Âµ1, Âµ2, . . . , Âµk are not all equal
 (alternatively, at least one mean differs).
 In fact, when k = 2, the two-sample t-test is equivalent to ANOVA; for
 that reason, ANOVA is most frequently employed when k > 2.
@@ -2565,7 +2565,7 @@ the left of Figure 19-1:
 R> boxplot(chickwts$weight~chickwts$feed)
 R> points(1:6,chick.means,pch=4,cex=1.5)
 Figure 19-1: Exploring the chickwts data. Left: Side-by-side boxplots of chick weight split
-by feed type, with the mean marked by ×. Right: Normal QQ plot of the mean-centered
+by feed type, with the mean marked by Ã—. Right: Normal QQ plot of the mean-centered
 data of each feed group.
 Because boxplots display the median, not the mean, the second line of
 code adds the feed-specific means (stored in the chick.means object you just
@@ -2573,7 +2573,7 @@ created) to each box using points.
 Inspecting the left plot of Figure 19-1, it certainly looks as though
 there's a difference in the mean weights. Is any apparent difference statistically significant, though? To find out, the ANOVA test for this example
 concerns the following hypotheses:
-H0 : µcasein = µhorsebean = µlinseed = µmeatmeal = µsoybean = µsunflower
+H0 : Âµcasein = Âµhorsebean = Âµlinseed = Âµmeatmeal = Âµsoybean = Âµsunflower
 HA : The means are not all equal.
 Assuming independence of the data, before implementing the test, you
 must first check that the other assumptions are valid. To examine equality of
@@ -2632,7 +2632,7 @@ Levene's test), but I'll stick with the basic rule of thumb and visual checks in
 this example.
 19.1.2 One-Way ANOVA Table Construction
 Turning your attention back to the left of Figure 19-1, remember that the
-goal is to statistically evaluate the equality of the means marked by ×. This
+goal is to statistically evaluate the equality of the means marked by Ã—. This
 task will therefore require you to consider not only the variability within each
 of the k samples but the variability between the samples; this is why the test is
 referred to as an analysis of variance.
@@ -2646,7 +2646,7 @@ Let x1, . . . , xN represent all N observations, regardless of group; let
 x1(j)
 , . . . , xnj (j) denote the specific group observations in group j = 1, . . . , k
 such that n1 + . . . + nk = N. Let the "grand mean" of all observations be
-defined as x¯ =
+defined as xÂ¯ =
 1
 N
 PN
@@ -2657,11 +2657,11 @@ stands for sum-of-squares, df stands for degrees of freedom, MS stands for
 mean square, F refers to the F test statistic, and p refers to the p-value.
 df SS MS F p
 Overall 1 (1)
-Group (or "Factor") k ??? 1 (2) (5) (5)÷(6) p-value
+Group (or "Factor") k ??? 1 (2) (5) (5)Ã·(6) p-value
 Error (or "Residual") N ??? k (3) (6)
 TOTAL N (4)
 You calculate the values with these formulas:
-(1): Nx¯
+(1): NxÂ¯
 2
 (2):
 Pk
@@ -2678,8 +2678,8 @@ i=1
 x
 2
 i
-(5): (2)÷(k ??? 1)
-(6): (3)÷(N ??? k)
+(5): (2)Ã·(k ??? 1)
+(6): (3)Ã·(N ??? k)
 There are three input sources that are assumed to make up the observed
 data, which, when added together, result in the TOTAL row. Let's think
 about these in a little more detail:
@@ -3173,10 +3173,10 @@ and response variables, respectively; i = 1, . . . , n. Then, the parameter esti
 sy
 sx
 and ??^
-0 = y¯ ??? ??^
-1 x¯ (20.3)
+0 = yÂ¯ ??? ??^
+1 xÂ¯ (20.3)
 where
-. x¯ and y¯ are the sample means of the xis and yis.
+. xÂ¯ and yÂ¯ are the sample means of the xis and yis.
 . sx and sy are the sample standard deviations of the xis and yis.
 . ??x y is the estimate of correlation between X and Y based on the data
 (see Section 13.2.5).
@@ -3286,7 +3286,7 @@ Simple Linear Regression 457
 the fitted value of that line. The simple linear regression line estimated as
 per (20.3) is the line that lies "closest to all observations." By this, it is meant
 that the fitted regression model is represented by the estimated line that
-passes through the coordinate provided by the variable means (x¯, y¯), and
+passes through the coordinate provided by the variable means (xÂ¯, yÂ¯), and
 it's the line that yields the smallest overall measure of the squared residual
 distances. For this reason, another name for a least-squares-estimated regression equation like this is the line of best fit.
 20.3 Statistical Inference
@@ -3342,7 +3342,7 @@ truth of H0 implies that the predictor has no effect on the response. The
 claim here is interested in whether there is any effect of the covariate, not
 the direction of this effect, so HA is two-sided (via ,). As with any hypothesis
 test, the smaller the p-value, the stronger the evidence against H0. With a
-small p-value (< 2 × 10???16) attached to this particular test statistic (which
+small p-value (< 2 Ã— 10???16) attached to this particular test statistic (which
 you can confirm using the formula in Chapter 18: T = (3.116 ??? 0)/0.2888 =
 10.79), you'd therefore conclude there is strong evidence against the claim
 that the predictor has no effect on the mean level of the response.
@@ -3441,12 +3441,12 @@ such that y^ = ??^
 0+ ??^
 1 x. A 100(1?????) percent confidence interval for the mean
 response given a value of x is calculated with
-y^ ± t(1?????/2,n???2)so
+y^ Â± t(1?????/2,n???2)so
 s
 1
 n
 +
-(x ??? x¯)
+(x ??? xÂ¯)
 2
 (n ??? 1)s
 2
@@ -3456,7 +3456,7 @@ where you obtain the lower limit by subtraction, the upper limit by addition.
 Here, y^ is the fitted value (from the regression line) at x; t(1?????/2,n???2)
 is
 the appropriate critical value from a t-distribution with n ??? 2 degrees of freedom (in other words, resulting in an upper-tail area of exactly ??/2); so is the
-estimated residual standard error; and x¯ and s
+estimated residual standard error; and xÂ¯ and s
 2
 x
 represent the sample mean
@@ -3470,13 +3470,13 @@ and the PI corresponds to an individual observation.
 Let's remain with the previous notation. It can be shown that 100(1 ??? ??)
 percent prediction interval for an individual response given a value of x is
 calculated with the following:
-y^ ± t(1?????/2,n???2)so
+y^ Â± t(1?????/2,n???2)so
 s
 1 +
 1
 n
 +
-(x ??? x¯)
+(x ??? xÂ¯)
 2
 (n ??? 1)s
 2
@@ -3751,11 +3751,11 @@ You were introduced to tapply in Section 10.2.3; in this call, the argument na.r
 passed to mean (you need it to ensure the missing values present in the data
 Simple Linear Regression 469
 do not end up producing NAs as the results). A further call to points adds
-those coordinates (as × symbols) to the image; Figure 20-4 gives the final
+those coordinates (as Ã— symbols) to the image; Figure 20-4 gives the final
 result.
 Figure 20-4: Boxplots of the student heights split by sex,
 with the raw observations and sample means (small ??? and
-large × symbols, respectively) superimposed
+large Ã— symbols, respectively) superimposed
 The plot indicates, overall, that males tend to be taller than females-
 but is there statistical evidence of a difference to back this up?
 Linear Regression Model of Binary Variables
@@ -3947,7 +3947,7 @@ R> boxplot(Height~Smoke,data=survey)
 R> points(1:4,tapply(survey$Height,survey$Smoke,mean,na.rm=TRUE),pch=4)
 474 Chapter 20
 Figure 20-5: Boxplots of the observed student heights split by
-smoking frequency; respective sample means marked with ×
+smoking frequency; respective sample means marked with Ã—
 Note from earlier R output that unless explicitly defined at creation, the
 levels of a factor appear in alphabetical order by default-as is the case for
 Smoke-and R will automatically set the first one (as shown in the output of a
@@ -4328,8 +4328,8 @@ is their response value.
 The computations involved in minimizing this squared distance (21.2) are
 made much easier by a matrix representation of the data. When dealing with n
 multivariate observations, you can write Equation (21.1) as follows,
-Y = X · ?? + o,
-where Y and o denote n × 1 column matrices such that
+Y = X Â· ?? + o,
+where Y and o denote n Ã— 1 column matrices such that
 Y =
 ???
 ???
@@ -4391,9 +4391,9 @@ o n
 .
 Multiple Linear Regression 487
 Here, yi and oi refer to the response observation and random error
-term for the ith individual. The quantity ?? is a (p + 1) × 1 column matrix
+term for the ith individual. The quantity ?? is a (p + 1) Ã— 1 column matrix
 of the regression coefficients, and then the observed predictor data for all
-individuals and explanatory variables are stored in an n × (p + 1) matrix X,
+individuals and explanatory variables are stored in an n Ã— (p + 1) matrix X,
 called the design matrix:
 ?? =
 ???
@@ -4497,13 +4497,13 @@ p
 ???
 = (X
 ???
-· X)
+Â· X)
 ???1
-· X
+Â· X
 ???
-· Y (21.3)
+Â· Y (21.3)
 It's important to note the following:
-. The symbol · represents matrix multiplication, the superscript ??? represents the transpose, and ???1
+. The symbol Â· represents matrix multiplication, the superscript ??? represents the transpose, and ???1
 represents the inverse when applied to
 matrices (as per Section 3.3).
 . Extending the size of ?? and X (note the leading column of 1s in X) to
@@ -4721,7 +4721,7 @@ for the survmult model is noticeably higher than the same quantity in either
 of the single-variate models, so you're actually accounting for more of the
 variation in the response by using multiple regression.
 The fitted model itself can be thought of as
-"Mean height" = 137.687 + 1.594 × "handspan" + 9.49 × "sex" (21.4)
+"Mean height" = 137.687 + 1.594 Ã— "handspan" + 9.49 Ã— "sex" (21.4)
 where "handspan" is the writing handspan supplied in centimeters and "sex"
 is supplied as either 1 (if male) or 0 (if female).
 NOTE The baseline (overall) intercept of around 137.687 cm represents the mean height of a
@@ -4744,10 +4744,10 @@ R> as.numeric(survcoefs[1]+survcoefs[3])
 [1] 147.1768
 Because of this, you could also write (21.4) as two equations. Here's the
 equation for female students:
-"Mean height" = 137.687 + 1.594 × "handspan"
+"Mean height" = 137.687 + 1.594 Ã— "handspan"
 Here's the equation for male students:
-"Mean height" = (137.687 + 9.4898) + 1.594 × "handspan"
-= 147.177 + 1.594 × "handspan"
+"Mean height" = (137.687 + 9.4898) + 1.594 Ã— "handspan"
+= 147.177 + 1.594 Ã— "handspan"
 This is handy because it allows you to visualize the multivariate model in
 much the same way as you can the simple linear models. This code produces
 Figure 21-1:
@@ -5539,31 +5539,31 @@ least one of the coefficients is significant, the entire effect should be deemed
 significant.
 The general equation for the fitted model can be written down directly
 from the output.
-"Mean total cholesterol" = 155.9636 + 0.9852 × "age"
-+ 28.6051 × "medium frame"
-+ 44.9474 × "large frame"
-??? 0.3514 × "age : medium frame"
-??? 0.8511 × "age : large frame" (21.7)
+"Mean total cholesterol" = 155.9636 + 0.9852 Ã— "age"
++ 28.6051 Ã— "medium frame"
++ 44.9474 Ã— "large frame"
+??? 0.3514 Ã— "age : medium frame"
+??? 0.8511 Ã— "age : large frame" (21.7)
 I've used a colon (:) to denote the interactive terms to mirror the R
 output.
 For the reference level of the categorical predictor, body type "small,"
 the fitted model can be written down straight from the output.
-"Mean total cholesterol" = 155.9636 + 0.9852 × "age"
+"Mean total cholesterol" = 155.9636 + 0.9852 Ã— "age"
 For a model with the main effects only, changing body type to "medium"
 or "large" would affect only the intercept-you know from Section 20.5 that
 the relevant effect is simply added to the outcome. The presence of the
 interaction, however, means that in addition to the change in the intercept,
 the main effect slope of age must now also be changed according to the relevant interactive term. For an individual with a "medium" frame, the model is
-"Mean total cholesterol" = 155.9636 + 0.9852 × "age" + 28.6051
-??? 0.3514 × "age"
-= 184.5687 + (0.9852 ??? 0.3514) × "age"
-= 184.5687 + 0.6338 × "age"
+"Mean total cholesterol" = 155.9636 + 0.9852 Ã— "age" + 28.6051
+??? 0.3514 Ã— "age"
+= 184.5687 + (0.9852 ??? 0.3514) Ã— "age"
+= 184.5687 + 0.6338 Ã— "age"
 Multiple Linear Regression 517
 and for an individual with a "large" frame, the model is
-"Mean total cholesterol" = 155.9636 + 0.9852 × "age" + 44.9474
-??? 0.8511 × "age"
-= 200.911 + (0.9852 ??? 0.8511) × "age"
-= 200.911 + 0.1341 × "age"
+"Mean total cholesterol" = 155.9636 + 0.9852 Ã— "age" + 44.9474
+??? 0.8511 Ã— "age"
+= 200.911 + (0.9852 ??? 0.8511) Ã— "age"
+= 200.911 + 0.1341 Ã— "age"
 You can easily calculate these in R by accessing the coefficients of the
 fitted model object:
 R> dia.coef <- coef(dia.fit)
@@ -5649,11 +5649,11 @@ there is indeed statistical evidence of an interactive effect between wool
 type and tension on mean breaks, on top of the contributing main effects
 of those predictors.
 The general fitted model can be understood as
-"Mean warp breaks" = 44.556 ??? 16.333 × "wool type B"
-??? 20.556 × "medium tension"
-??? 20.000 × "high tension"
-+ 21.111 × "wool type B : medium tension"
-+ 10.556 × "wool type B : high tension"
+"Mean warp breaks" = 44.556 ??? 16.333 Ã— "wool type B"
+??? 20.556 Ã— "medium tension"
+??? 20.000 Ã— "high tension"
++ 21.111 Ã— "wool type B : medium tension"
++ 10.556 Ã— "wool type B : high tension"
 The additional interaction terms work the same way as the main
 effects-when only categorical predictors are involved, the model can be
 seen as a series of additive terms to the overall intercept. Exactly which ones
@@ -5708,12 +5708,12 @@ Residual standard error: 2.153 on 28 degrees of freedom
 Multiple R-squared: 0.8848, Adjusted R-squared: 0.8724
 F-statistic: 71.66 on 3 and 28 DF, p-value: 2.981e-13
 The model is written as
-"Mean MPG" = 49.80842 ??? 0.12010 × "horsepower"
-??? 8.21662 × "weight"
-+ 0.02785 × "horsepower : weight"
-= 49.80842 ??? 0.12010 × "horsepower"
-??? 8.21662 × "weight"
-+ 0.02785 × "horsepower" × "weight"
+"Mean MPG" = 49.80842 ??? 0.12010 Ã— "horsepower"
+??? 8.21662 Ã— "weight"
++ 0.02785 Ã— "horsepower : weight"
+= 49.80842 ??? 0.12010 Ã— "horsepower"
+??? 8.21662 Ã— "weight"
++ 0.02785 Ã— "horsepower" Ã— "weight"
 The second version of the model equation provided here reveals for
 the first time an interaction expressed as the product of the values of the
 two predictors, which is exactly how the fitted model is used to predict the
