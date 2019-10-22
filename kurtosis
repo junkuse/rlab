@@ -1,51 +1,269 @@
-Kurtosis
-The excess kurtosis of a univariate population is defined by the following formula, where μ2 and μ4 are respectively the second and fourth central moments.
+Regression analysis is a very widely used statistical tool to establish a relationship model between two variables. One of these variable is called predictor variable whose value is gathered through experiments. The other variable is called response variable whose value is derived from the predictor variable.
 
-γ2 = μ4∕μ22 - 3
-Intuitively, the excess kurtosis describes the tail shape of the data distribution. The normal distribution has zero excess kurtosis and thus the standard tail shape. It is said to be mesokurtic. Negative excess kurtosis would indicate a thin-tailed data distribution, and is said to be platykurtic. Positive excess kurtosis would indicate a fat-tailed distribution, and is said to be leptokurtic.
+In Linear Regression these two variables are related through an equation, where exponent (power) of both these variables is 1. Mathematically a linear relationship represents a straight line when plotted as a graph. A non-linear relationship where the exponent of any variable is not equal to 1 creates a curve.
+
+The general mathematical equation for a linear regression is −
+
+y = ax + b
+Following is the description of the parameters used −
+
+y is the response variable.
+
+x is the predictor variable.
+
+a and b are constants which are called the coefficients.
+
+Steps to Establish a Regression
+A simple example of regression is predicting weight of a person when his height is known. To do this we need to have the relationship between height and weight of a person.
+
+The steps to create the relationship is −
+
+Carry out the experiment of gathering a sample of observed values of height and corresponding weight.
+
+Create a relationship model using the lm() functions in R.
+
+Find the coefficients from the model created and create the mathematical equation using these
+
+Get a summary of the relationship model to know the average error in prediction. Also called residuals.
+
+To predict the weight of new persons, use the predict() function in R.
+
+Input Data
+Below is the sample data representing the observations −
+
+# Values of height
+151, 174, 138, 186, 128, 136, 179, 163, 152, 131
+
+# Values of weight.
+63, 81, 56, 91, 47, 57, 76, 72, 62, 48
+lm() Function
+This function creates the relationship model between the predictor and the response variable.
+
+Syntax
+The basic syntax for lm() function in linear regression is −
+
+lm(formula,data)
+Following is the description of the parameters used −
+
+formula is a symbol presenting the relation between x and y.
+
+data is the vector on which the formula will be applied.
+
+Create Relationship Model & get the Coefficients
+ Live Demo
+x <- c(151, 174, 138, 186, 128, 136, 179, 163, 152, 131)
+y <- c(63, 81, 56, 91, 47, 57, 76, 72, 62, 48)
+
+# Apply the lm() function.
+relation <- lm(y~x)
+
+print(relation)
+When we execute the above code, it produces the following result −
+
+Call:
+lm(formula = y ~ x)
+
+Coefficients:
+(Intercept)            x  
+   -38.4551          0.6746 
+Get the Summary of the Relationship
+ Live Demo
+x <- c(151, 174, 138, 186, 128, 136, 179, 163, 152, 131)
+y <- c(63, 81, 56, 91, 47, 57, 76, 72, 62, 48)
+
+# Apply the lm() function.
+relation <- lm(y~x)
+
+print(summary(relation))
+When we execute the above code, it produces the following result −
+
+Call:
+lm(formula = y ~ x)
+
+Residuals:
+    Min      1Q     Median      3Q     Max 
+-6.3002    -1.6629  0.0412    1.8944  3.9775 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -38.45509    8.04901  -4.778  0.00139 ** 
+x             0.67461    0.05191  12.997 1.16e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.253 on 8 degrees of freedom
+Multiple R-squared:  0.9548,    Adjusted R-squared:  0.9491 
+F-statistic: 168.9 on 1 and 8 DF,  p-value: 1.164e-06
+predict() Function
+Syntax
+The basic syntax for predict() in linear regression is −
+
+predict(object, newdata)
+Following is the description of the parameters used −
+
+object is the formula which is already created using the lm() function.
+
+newdata is the vector containing the new value for predictor variable.
+
+Predict the weight of new persons
+ Live Demo
+# The predictor vector.
+x <- c(151, 174, 138, 186, 128, 136, 179, 163, 152, 131)
+
+# The resposne vector.
+y <- c(63, 81, 56, 91, 47, 57, 76, 72, 62, 48)
+
+# Apply the lm() function.
+relation <- lm(y~x)
+
+# Find weight of a person with height 170.
+a <- data.frame(x = 170)
+result <-  predict(relation,a)
+print(result)
+When we execute the above code, it produces the following result −
+
+       1 
+76.22869 
+Visualize the Regression Graphically
+ Live Demo
+# Create the predictor and response variable.
+x <- c(151, 174, 138, 186, 128, 136, 179, 163, 152, 131)
+y <- c(63, 81, 56, 91, 47, 57, 76, 72, 62, 48)
+relation <- lm(y~x)
+
+# Give the chart file a name.
+png(file = "linearregression.png")
+
+# Plot the chart.
+plot(y,x,col = "blue",main = "Height & Weight Regression",
+abline(lm(x~y)),cex = 1.3,pch = 16,xlab = "Weight in Kg",ylab = "Height in cm")
+
+# Save the file.
+dev.off()
+When we execute the above code, it produces the following result −
+
+====================================================
+
+Multiple regression is an extension of linear regression into relationship between more than two variables. In simple linear relation we have one predictor and one response variable, but in multiple regression we have more than one predictor variable and one response variable.
+
+The general mathematical equation for multiple regression is −
+
+y = a + b1x1 + b2x2 +...bnxn
+Following is the description of the parameters used −
+
+y is the response variable.
+
+a, b1, b2...bn are the coefficients.
+
+x1, x2, ...xn are the predictor variables.
+
+We create the regression model using the lm() function in R. The model determines the value of the coefficients using the input data. Next we can predict the value of the response variable for a given set of predictor variables using these coefficients.
+
+lm() Function
+This function creates the relationship model between the predictor and the response variable.
+
+Syntax
+The basic syntax for lm() function in multiple regression is −
+
+lm(y ~ x1+x2+x3...,data)
+Following is the description of the parameters used −
+
+formula is a symbol presenting the relation between the response variable and predictor variables.
+
+data is the vector on which the formula will be applied.
+
+Example
+Input Data
+Consider the data set "mtcars" available in the R environment. It gives a comparison between different car models in terms of mileage per gallon (mpg), cylinder displacement("disp"), horse power("hp"), weight of the car("wt") and some more parameters.
+
+The goal of the model is to establish the relationship between "mpg" as a response variable with "disp","hp" and "wt" as predictor variables. We create a subset of these variables from the mtcars data set for this purpose.
+
+ Live Demo
+input <- mtcars[,c("mpg","disp","hp","wt")]
+print(head(input))
+
+Create Relationship Model & get the Coefficients
+ Live Demo
+input <- mtcars[,c("mpg","disp","hp","wt")]
+
+# Create the relationship model.
+model <- lm(mpg~disp+hp+wt, data = input)
+
+# Show the model.
+print(model)
+
+# Get the Intercept and coefficients as vector elements.
+cat("# # # # The Coefficient Values # # # ","\n")
+
+a <- coef(model)[1]
+print(a)
+
+Xdisp <- coef(model)[2]
+Xhp <- coef(model)[3]
+Xwt <- coef(model)[4]
+
+print(Xdisp)
+print(Xhp)
+print(Xwt)
+When we execute the above code, it produces the following result −
+
+Call:
+lm(formula = mpg ~ disp + hp + wt, data = input)
+
+Coefficients:
+(Intercept)         disp           hp           wt  
+  37.105505      -0.000937        -0.031157    -3.800891  
+
+# # # # The Coefficient Values # # # 
+(Intercept) 
+   37.10551 
+         disp 
+-0.0009370091 
+         hp 
+-0.03115655 
+       wt 
+-3.800891 
+Create Equation for Regression Model
+Based on the above intercept and coefficient values, we create the mathematical equation.
+
+Y = a+Xdisp.x1+Xhp.x2+Xwt.x3
+or
+Y = 37.15+(-0.000937)*x1+(-0.0311)*x2+(-3.8008)*x3
+Apply Equation for predicting New Values
+We can use the regression equation created above to predict the mileage when a new set of values for displacement, horse power and weight is provided.
+
+For a car with disp = 221, hp = 102 and wt = 2.91 the predicted mileage is −
+
+Y = 37.15+(-0.000937)*221+(-0.0311)*102+(-3.8008)*2.91 = 22.7104
+
+=====================================================
+
+Correlation Coefficient
+The correlation coefficient of two variables in a data set equals to their covariance divided by the product of their individual standard deviations. It is a normalized measurement of how the two are linearly related.
+
+Formally, the sample correlation coefficient is defined by the following formula, where sx and sy are the sample standard deviations, and sxy is the sample covariance.
+
+      s
+rxy =--xy
+     sxsy
+Similarly, the population correlation coefficient is defined as follows, where σx and σy are the population standard deviations, and σxy is the population covariance.
+
+ρ  = -σxy-
+ xy  σxσy
+If the correlation coefficient is close to 1, it would indicate that the variables are positively linearly related and the scatter plot falls almost along a straight line with positive slope. For -1, it indicates that the variables are negatively linearly related and the scatter plot almost falls along a straight line with negative slope. And for zero, it would indicate a weak linear relationship between the variables.
 
 Problem
-Find the excess kurtosis of eruption duration in the data set faithful.
+Find the correlation coefficient of eruption duration and waiting time in the data set faithful. Observe if there is any linear relationship between the variables.
 
 Solution
-We apply the function kurtosis from the e1071 package to compute the excess kurtosis of eruptions. As the package is not in the core R library, it has to be installed and loaded into the R workspace.
+We apply the cor function to compute the correlation coefficient of eruptions and waiting.
 
-> library(e1071)                    # load e1071 
-> duration = faithful$eruptions     # eruption durations 
-> kurtosis(duration)                # apply the kurtosis function 
-[1] -1.5116
+> duration = faithful$eruptions   # eruption durations 
+> waiting = faithful$waiting      # the waiting period 
+> cor(duration, waiting)          # apply the cor function 
+[1] 0.90081
 Answer
-The excess kurtosis of eruption duration is -1.5116, which indicates that eruption duration distribution is platykurtic. This is consistent with the fact that its histogram is not bell-shaped.
-
-Exercise
-Find the excess kurtosis of eruption waiting period in faithful.
-
-Note
-The default algorithm of the function kurtosis in e1071 is based on the formula g2 = m4∕s4 - 3, where m4 and s are the fourth central moment and sample standard deviation respectively. See the R documentation for selecting other types of kurtosis algorithm.
-
-> library(e1071)                    # load e1071 
-> help(kurtosis)
-
-====================================
-
-Skewness
-The skewness of a data population is defined by the following formula, where μ2 and μ3 are the second and third central moments.
-
-γ1 = μ3∕μ3∕22
-Intuitively, the skewness is a measure of symmetry. As a rule, negative skewness indicates that the mean of the data values is less than the median, and the data distribution is left-skewed. Positive skewness would indicate that the mean of the data values is larger than the median, and the data distribution is right-skewed.
-
-Problem
-Find the skewness of eruption duration in the data set faithful.
-
-Solution
-We apply the function skewness from the e1071 package to compute the skewness coefficient of eruptions. As the package is not in the core R library, it has to be installed and loaded into the R workspace.
-
-> library(e1071)                    # load e1071 
-> duration = faithful$eruptions     # eruption durations 
-> skewness(duration)                # apply the skewness function 
-[1] -0.41355
-Answer
-The skewness of eruption duration is -0.41355. It indicates that the eruption duration distribution is skewed towards the left.
+The correlation coefficient of eruption duration and waiting time is 0.90081. Since it is rather close to 1, we can conclude that the variables are positively linearly related.
 
 =========================================
 
@@ -74,3 +292,383 @@ We apply the function moment from the e1071 package. As it is not in the core R 
 [1] -0.6149
 Answer
 The third central moment of eruption duration is -0.6149.
+
+=================================================
+
+Point Estimate of Population Mean
+For any particular random sample, we can always compute its sample mean. Although most often it is not the actual population mean, it does serve as a good point estimate. For example, in the data set survey, the survey is performed on a sample of the student population. We can compute the sample mean and use it as an estimate of the corresponding population parameter.
+
+Problem
+Find a point estimate of mean university student height with the sample data from survey.
+
+Solution
+For convenience, we begin with saving the survey data of student heights in a variable height.survey.
+
+> library(MASS)                  # load the MASS package 
+> height.survey = survey$Height
+It turns out not all students have answered the question, and we must filter out the missing values. Hence we apply the mean function with the "na.rm" argument as TRUE.
+
+> mean(height.survey, na.rm=TRUE)  # skip missing values 
+[1] 172.38
+
+=======================
+
+Interval Estimate of Population Mean with Known Variance
+After we found a point estimate of the population mean, we would need a way to quantify its accuracy. Here, we discuss the case where the population variance σ2 is assumed known.
+
+Let us denote the 100(1 −α∕2) percentile of the standard normal distribution as zα∕2. For random sample of sufficiently large size, the end points of the interval estimate at (1 − α) confidence level is given as follows:
+
+        σ
+¯x± zα∕2√--
+        n
+Problem
+Assume the population standard deviation σ of the student height in survey is 9.48. Find the margin of error and interval estimate at 95% confidence level.
+
+Solution
+We first filter out missing values in survey$Height with the na.omit function, and save it in height.response.
+
+> library(MASS)                  # load the MASS package 
+> height.response = na.omit(survey$Height)
+Then we compute the standard error of the mean.
+
+> n = length(height.response) 
+> sigma = 9.48                   # population standard deviation 
+> sem = sigma/sqrt(n); sem       # standard error of the mean 
+[1] 0.65575
+Since there are two tails of the normal distribution, the 95% confidence level would imply the 97.5th percentile of the normal distribution at the upper tail. Therefore, zα∕2 is given by qnorm(.975). We multiply it with the standard error of the mean sem and get the margin of error.
+
+> E = qnorm(.975)∗sem; E         # margin of error 
+[1] 1.2852
+We then add it up with the sample mean, and find the confidence interval as told.
+
+> xbar = mean(height.response)   # sample mean 
+> xbar + c(−E, E) 
+[1] 171.10 173.67
+Answer
+Assuming the population standard deviation σ being 9.48, the margin of error for the student height survey at 95% confidence level is 1.2852 centimeters. The confidence interval is between 171.10 and 173.67 centimeters.
+
+Alternative Solution
+Instead of using the textbook formula, we can apply the z.test function in the TeachingDemos package. It is not a core R package, and must be installed and loaded into the workspace beforehand.
+
+> library(TeachingDemos)         # load TeachingDemos package 
+> z.test(height.response, sd=sigma) 
+ 
+       One Sample z−test 
+ 
+data:  height.response 
+z = 262.88, n = 209.000, Std. Dev. = 9.480, 
+Std. Dev. of the sample mean = 0.656, p−value < 2.2e−16 
+alternative hypothesis: true mean is not equal to 0 
+95 percent confidence interval: 
+ 171.10 173.67 
+sample estimates: 
+mean of height.response 
+                 172.38
+                 
+=======================================
+
+Interval Estimate of Population Mean with Unknown Variance
+After we found a point estimate of the population mean, we would need a way to quantify its accuracy. Here, we discuss the case where the population variance is not assumed.
+
+Let us denote the 100(1 −α∕2) percentile of the Student t distribution with n− 1 degrees of freedom as tα∕2. For random samples of sufficiently large size, and with standard deviation s, the end points of the interval estimate at (1 −α) confidence level is given as follows:
+
+        s
+¯x± tα∕2√--
+        n
+Problem
+Without assuming the population standard deviation of the student height in survey, find the margin of error and interval estimate at 95% confidence level.
+
+Solution
+We first filter out missing values in survey$Height with the na.omit function, and save it in height.response.
+
+> library(MASS)                  # load the MASS package 
+> height.response = na.omit(survey$Height)
+Then we compute the sample standard deviation.
+
+> n = length(height.response) 
+> s = sd(height.response)        # sample standard deviation 
+> SE = s/sqrt(n); SE             # standard error estimate 
+[1] 0.68117
+Since there are two tails of the Student t distribution, the 95% confidence level would imply the 97.5th percentile of the Student t distribution at the upper tail. Therefore, tα∕2 is given by qt(.975, df=n-1). We multiply it with the standard error estimate SE and get the margin of error.
+
+> E = qt(.975, df=n−1)∗SE; E     # margin of error 
+[1] 1.3429
+We then add it up with the sample mean, and find the confidence interval.
+
+> xbar = mean(height.response)   # sample mean 
+> xbar + c(−E, E) 
+[1] 171.04 173.72
+Answer
+Without assumption on the population standard deviation, the margin of error for the student height survey at 95% confidence level is 1.3429 centimeters. The confidence interval is between 171.04 and 173.72 centimeters.
+
+Alternative Solution
+Instead of using the textbook formula, we can apply the t.test function in the built-in stats package.
+
+> t.test(height.response) 
+ 
+       One Sample t−test 
+ 
+data:  height.response 
+t = 253.07, df = 208, p−value < 2.2e−16 
+alternative hypothesis: true mean is not equal to 0 
+95 percent confidence interval: 
+ 171.04 173.72 
+sample estimates: 
+mean of x 
+   172.38
+   
+   ===========================
+   
+   Sampling Size of Population Mean
+The quality of a sample survey can be improved by increasing the sample size. The formula below provide the sample size needed under the requirement of population mean interval estimate at (1 −α) confidence level, margin of error E, and population variance σ2. Here, zα∕2 is the 100(1 − α∕2) percentile of the standard normal distribution.
+
+         2 2
+n = (zα∕2)σ--
+      E2
+Problem
+Assume the population standard deviation σ of the student height in survey is 9.48. Find the sample size needed to achieve a 1.2 centimeters margin of error at 95% confidence level.
+
+Solution
+Since there are two tails of the normal distribution, the 95% confidence level would imply the 97.5th percentile of the normal distribution at the upper tail. Therefore, zα∕2 is given by qnorm(.975).
+
+> zstar = qnorm(.975) 
+> sigma = 9.48 
+> E = 1.2 
+> zstar^2 ∗ sigma^2/ E^2 
+[1] 239.75
+Answer
+Based on the assumption of population standard deviation being 9.48, it needs a sample size of 240 to achieve a 1.2 centimeters margin of error at 95% confidence level.
+
+===============================================
+
+Point Estimate of Population Proportion
+Multiple choice questionnaires in a survey are often used to determine the the proportion of a population with certain characteristic. For example, we can estimate the proportion of female students in the university based on the result in the sample data set survey.
+
+Problem
+Find a point estimate of the female student proportion from survey.
+
+Solution
+We first filter out missing values in survey$Sex with the na.omit function, and save it in gender.response.
+
+> library(MASS)                  # load the MASS package 
+> gender.response = na.omit(survey$Sex) 
+> n = length(gender.response)    # valid responses count
+To find out the number of female students, we compare gender.response with the factor ’Female’, and compute the sum. Dividing it by n gives the female student proportion in the sample survey.
+
+> k = sum(gender.response == "Female") 
+> pbar = k/n; pbar 
+[1] 0.5
+Answer
+The point estimate of the female student proportion in survey is 50%.
+
+=====================================================
+
+Interval Estimate of Population Proportion
+After we found a point sample estimate of the population proportion, we would need to estimate its confidence interval.
+
+Let us denote the 100(1 −α∕2) percentile of the standard normal distribution as zα∕2. If the samples size n and population proportion p satisfy the condition that np ≥ 5 and n(1 − p) ≥ 5, than the end points of the interval estimate at (1 − α) confidence level is defined in terms of the sample proportion as follows.
+
+       ∘--------
+¯p± z     ¯p(1-−-¯p)
+    α∕2    n
+Problem
+Compute the margin of error and estimate interval for the female students proportion in survey at 95% confidence level.
+
+Solution
+We first determine the proportion point estimate. Further details can be found in the previous tutorial.
+
+> library(MASS)                  # load the MASS package 
+> gender.response = na.omit(survey$Sex) 
+> n = length(gender.response)    # valid responses count 
+> k = sum(gender.response == "Female") 
+> pbar = k/n; pbar 
+[1] 0.5
+Then we estimate the standard error.
+
+> SE = sqrt(pbar∗(1−pbar)/n); SE     # standard error 
+[1] 0.032547
+Since there are two tails of the normal distribution, the 95% confidence level would imply the 97.5th percentile of the normal distribution at the upper tail. Therefore, zα∕2 is given by qnorm(.975). Hence we multiply it with the standard error estimate SE and compute the margin of error.
+
+> E = qnorm(.975)∗SE; E              # margin of error 
+[1] 0.063791
+Combining it with the sample proportion, we obtain the confidence interval.
+
+> pbar + c(−E, E) 
+[1] 0.43621 0.56379
+Answer
+At 95% confidence level, between 43.6% and 56.3% of the university students are female, and the margin of error is 6.4%.
+
+Alternative Solution
+Instead of using the textbook formula, we can apply the prop.test function in the built-in stats package.
+
+> prop.test(k, n) 
+ 
+       1−sample proportions test without continuity 
+           correction 
+ 
+data:  k out of n, null probability 0.5 
+X−squared = 0, df = 1, p−value = 1 
+alternative hypothesis: true p is not equal to 0.5 
+95 percent confidence interval: 
+ 0.43672 0.56328 
+sample estimates: 
+  p 
+0.5
+
+========================================================
+
+Sampling Size of Population Proportion
+The quality of a sample survey can be improved by increasing the sample size. The formula below provide the sample size needed under the requirement of population proportion interval estimate at (1 − α) confidence level, margin of error E, and planned proportion estimate p. Here, zα∕2 is the 100(1 − α∕2) percentile of the standard normal distribution.
+
+         2
+n = (zα∕2)-p(1−-p)
+         E2
+Problem
+Using a 50% planned proportion estimate, find the sample size needed to achieve 5% margin of error for the female student survey at 95% confidence level.
+
+Solution
+Since there are two tails of the normal distribution, the 95% confidence level would imply the 97.5th percentile of the normal distribution at the upper tail. Therefore, zα∕2 is given by qnorm(.975).
+
+> zstar = qnorm(.975) 
+> p = 0.5 
+> E = 0.05 
+> zstar^2 ∗ p ∗ (1−p) / E^2 
+[1] 384.15
+Answer
+With a planned proportion estimate of 50% at 95% confidence level, it needs a sample size of 385 to achieve a 5% margin of error for the survey of female student proportion.
+
+===============================================================
+
+Randomized Block Design
+In a randomized block design, there is only one primary factor under consideration in the experiment. Similar test subjects are grouped into blocks. Each block is tested against all treatment levels of the primary factor at random order. This is intended to eliminate possible influence by other extraneous factors.
+
+Example
+A fast food franchise is test marketing 3 new menu items. To find out if they have the same popularity, 6 franchisee restaurants are randomly chosen for participation in the study. In accordance with the randomized block design, each restaurant will be test marketing all 3 new menu items. Furthermore, a restaurant will test market only one menu item per week, and it takes 3 weeks to test market all menu items. The testing order of the menu items for each restaurant is randomly assigned as well.
+
+Problem
+Suppose each row in the following table represents the sales figures of the 3 new menu in a restaurant after a week of test marketing. At .05 level of significance, test whether the mean sales volume for the 3 new menu items are all equal.
+
+ Item1 Item2 Item3 
+    31    27    24 
+    31    28    31 
+    45    29    46 
+    21    18    48 
+    42    36    46 
+    32    17    40
+Solution
+The solution consists of the following steps:
+
+Copy and paste the sales figure above into a table file named "fastfood-2.txt" with a text editor.
+Load the file into a data frame named df2 with the read.table function. As the first line in the file contains the column names, we set the header argument as TRUE.
+> df2 = read.table("fastfood-2.txt", header=TRUE); df2 
+  Item1 Item2 Item3 
+1    31    27    24 
+2    31    28    31 
+3    45    29    46 
+4    21    18    48 
+5    42    36    46 
+6    32    17    40
+Concatenate the data rows in df2 into a single vector r .
+> r = c(t(as.matrix(df2))) # response data 
+> r 
+ [1] 31 27 24 31 28 ...
+Assign new variables for the treatment levels and number of control blocks.
+> f = c("Item1", "Item2", "Item3")   # treatment levels 
+> k = 3                    # number of treatment levels 
+> n = 6                    # number of control blocks
+Create a vector of treatment factors that corresponds to the each element in r of step 3 with the gl function.
+> tm = gl(k, 1, n*k, factor(f))   # matching treatment 
+> tm 
+ [1] Item1 Item2 Item3 Item1 Item2 ...
+Similarly, create a vector of blocking factors for each element in the response data r.
+> blk = gl(n, k, k*n)             # blocking factor 
+> blk 
+ [1] 1 1 1 2 2 2 3 3 3 4 4 4 5 5 5 6 6 6 
+Levels: 1 2 3 4 5 6
+Apply the function aov to a formula that describes the response r by both the treatment factor tm and the block control blk.
+> av = aov(r ~ tm + blk)
+Print out the ANOVA table with the summary function.
+> summary(av) 
+            Df Sum Sq Mean Sq F value Pr(>F) 
+tm           2    539     269    4.96  0.032 * 
+blk          5    560     112    2.06  0.155 
+Residuals   10    543      54
+Answer
+Since the p-value of 0.032 is less than the .05 significance level, we reject the null hypothesis that the mean sales volume of the new menu items are all equal.
+
+===================================
+
+Factorial Design
+In a factorial design, there are more than one factors under consideration in the experiment. The test subjects are assigned to treatment levels of every factor combinations at random.
+
+Example
+A fast food franchise is test marketing 3 new menu items in both East and West Coasts of continental United States. To find out if they the same popularity, 12 franchisee restaurants from each Coast are randomly chosen for participation in the study. In accordance with the factorial design, within the 12 restaurants from East Coast, 4 are randomly chosen to test market the first new menu item, another 4 for the second menu item, and the remaining 4 for the last menu item. The 12 restaurants from the West Coast are arranged likewise.
+
+Problem
+Suppose the following tables represent the sales figures of the 3 new menu items after a week of test marketing. Each row in the upper table represents the sales figures of 3 different East Coast restaurants. The lower half represents West Coast restaurants. At .05 level of significance, test whether the mean sales volume for the new menu items are all equal. Decide also whether the mean sales volume of the two coastal regions differs.
+
+East Coast: 
+========== 
+   Item1 Item2 Item3 
+E1    25    39    36 
+E2    36    42    24 
+E3    31    39    28 
+E4    26    35    29 
+ 
+West Coast: 
+========== 
+   Item1 Item2 Item3 
+W1    51    43    42 
+W2    47    39    36 
+W3    47    53    32 
+W4    52    46    33
+Solution
+The solution consists of the following steps:
+
+Save the sales figure into a file named "fastfood-3.csv" in CSV format as follows.
+Item1,Item2,Item3 
+E1,25,39,36 
+E2,36,42,24 
+E3,31,39,28 
+E4,26,35,29 
+W1,51,43,42 
+W2,47,39,36 
+W3,47,53,32 
+W4,52,46,33
+Load the data into a data frame named df3 with the read.csv function.
+> df3 = read.csv("fastfood-3.csv")
+Concatenate the data rows in df3 into a single vector r .
+> r = c(t(as.matrix(df3))) # response data 
+> r 
+ [1] 25 39 36 36 42 ...
+Assign new variables for the treatment levels and number of observations.
+> f1 = c("Item1", "Item2", "Item3") # 1st factor levels 
+> f2 = c("East", "West")            # 2nd factor levels 
+> k1 = length(f1)          # number of 1st factors 
+> k2 = length(f2)          # number of 2nd factors 
+> n = 4                    # observations per treatment
+Create a vector that corresponds to the 1th treatment level of the response data r in step 3 element-by-element with the gl function.
+> tm1 = gl(k1, 1, n*k1*k2, factor(f1)) 
+> tm1 
+ [1] Item1 Item2 Item3 Item1 Item2 ...
+Similarly, create a vector that corresponds to the 2nd treatment level of the response data r in step 3.
+> tm2 = gl(k2, n*k1, n*k1*k2, factor(f2)) 
+> tm2 
+ [1] East East East East East ...
+Apply the function aov to a formula that describes the response r by the two treatment factors tm1 and tm2 with interaction.
+> av = aov(r ~ tm1 * tm2)  # include interaction
+Print out the ANOVA table with summary function.
+> summary(av) 
+            Df Sum Sq Mean Sq F value  Pr(>F) 
+tm1          2    385     193    9.55  0.0015 ** 
+tm2          1    715     715   35.48 1.2e-05 *** 
+tm1:tm2      2    234     117    5.81  0.0113 * 
+Residuals   18    363      20
+Answer
+Since the p-value of 0.0015 for the menu items is less than the .05 significance level, we reject the null hypothesis that the mean sales volume of the new menu items are all equal. Moreover, the p-value of 1.2e-05 for the east-west coasts comparison is also less than the .05 significance level. It shows there is a difference in overall sales volume between the coasts. Finally, the last p-value of 0.0113 (< 0.05) indicates that there is a possible interaction between the menu item and coast location factors, i.e., customers from different coastal regions have different tastes.
+
+
+=============================================================
+                 
+                 
+
